@@ -31,6 +31,12 @@ modules:
         # keeps nautilus marked user-installed; without this the GNOME
         # removal cascade removes it as an orphan of nautilus-gsconnect
         - nautilus
+      exclude:
+        # niri Recommends these companions; unused here (noctalia provides
+        # bar/launcher/lock screen) and would be dead weight in the image
+        - swaylock
+        - waybar
+        - fuzzel
 
   # terra ships disabled in bazzite; enable it just for the build
   # (ghostty/awww/satty/yazi/starship live there, verified "Terra 44")
