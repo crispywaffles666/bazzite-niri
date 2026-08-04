@@ -1,0 +1,12 @@
+# Paths to keep in sync across all machine branches.
+# One path per line. Directories should end with /
+# Lines starting with # are ignored.
+
+.config/nvim/
+README.md
+sync.sh
+.dotfiles-shared
+.config/systemd/user/dotfiles-sync.service
+.local/bin/screenshot-notify.sh
+.local/bin/auto-fullwidth-dp3.sh
+.local/bin/niri-overview-autoclose.sh

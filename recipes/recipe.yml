@@ -1,0 +1,118 @@
+# Custom image: bazzite-gnome with GNOME stripped, niri + noctalia desktop
+# environment layered in (parity with the owner's CachyOS setup).
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+name: bazzite-niri
+description: Bazzite with GNOME stripped, niri compositor + noctalia shell (CachyOS parity)
+
+base-image: ghcr.io/ublue-os/bazzite-gnome
+image-version: stable
+
+modules:
+  # greetd + tuigreet login manager config
+  - type: files
+    files:
+      - source: system
+        destination: /
+
+  # niri compositor + login manager.
+  # xdg-desktop-portal-gnome and gnome-keyring are listed here so dnf marks
+  # them user-installed and the GNOME autoremove pass keeps them.
+  - type: dnf
+    install:
+      packages:
+        - niri
+        - xwayland-satellite
+        - greetd
+        - tuigreet
+        - alacritty
+        - xdg-desktop-portal-gnome
+        - gnome-keyring
+        # keeps nautilus marked user-installed; without this the GNOME
+        # removal cascade removes it as an orphan of nautilus-gsconnect
+        - nautilus
+
+  # terra ships disabled in bazzite; enable it just for the build
+  # (ghostty/awww/satty/yazi/starship live there, verified "Terra 44")
+  - type: script
+    snippets:
+      - dnf5 config-manager setopt terra.enabled=1
+
+  # breeze-icon-theme must land in its own transaction: installing it in the
+  # same rpm transaction as kf6-breeze-icons reproducibly fails cpio unpack
+  # ("symlink failed" on a breeze-dark icon). It is a hard dependency of
+  # qt6ct via kf6-kiconthemes -> kf6-breeze-icons -> breeze-icon-theme, so it
+  # cannot be excluded; installing it first sidesteps the rpm bug.
+  - type: dnf
+    install:
+      packages:
+        - breeze-icon-theme
+
+  # Phase 2: desktop shell + user's desktop environment (CachyOS parity).
+  # ghostty/awww/satty/yazi/starship come from terra (enabled for the build
+  # bazzite); everything else is from the official Fedora repos.
+  - type: dnf
+    install:
+      packages:
+        # shell + compositor companions
+        - noctalia
+        - ghostty
+        - awww
+        - satty
+        - matugen
+        - cliphist
+        - brightnessctl
+        - playerctl
+        - inotify-tools
+        - slurp
+        - pavucontrol
+        - cava
+        # power-profiles-daemon deliberately absent: base ships tuned-ppd,
+        # which conflicts with it and already serves the same PPD DBus API
+        # desktop tools
+        - qt5ct
+        - qt6ct
+        - seahorse
+        - sassc
+        - xterm
+        # cli tools (neovim + LSPs deliberately excluded: installed via brew)
+        - zsh
+        - bat
+        - micro
+        - geany
+        - ripgrep
+        - stow
+        - yazi
+        - starship
+
+  # strip the GNOME desktop (keeps xdg-desktop-portal-gnome + gnome-keyring),
+  # then enable greetd as the display manager
+  - type: script
+    scripts:
+      - remove-gnome.sh
+      - setup-greetd.sh
+      - install-overpass-nerd.sh
+
+  # Phase 3: plain Overpass (monospace-font-name 'Overpass Mono' in the
+  # gschema override refers to the unpatched family)
+  - type: dnf
+    install:
+      packages:
+        - overpass-fonts
+
+  # delete GNOME-era gschema overrides shipped by fedora/bazzite: they are
+  # dead weight here and break --strict compilation — org.gnome.shell /
+  # org.gnome.mutter / org.gnome.login-screen reference schemas removed with
+  # GNOME, the screensaver override sets picture-uri* keys GNOME 48 dropped,
+  # and bazzite's zz0-* files mix valid keys with gnome-software/mutter/shell
+  # keys. Then compile with --strict so the build fails on any bad key in the
+  # remaining overrides (fedora background + zz_bazzite-niri).
+  - type: script
+    snippets:
+      - rm -f /usr/share/glib-2.0/schemas/00_org.gnome.shell.gschema.override /usr/share/glib-2.0/schemas/org.gnome.shell.gschema.override /usr/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override /usr/share/glib-2.0/schemas/10_org.gnome.desktop.screensaver.fedora.gschema.override /usr/share/glib-2.0/schemas/org.gnome.Ptyxis.fedora.gschema.override /usr/share/glib-2.0/schemas/zz0-0*.gschema.override
+      - glib-compile-schemas --strict /usr/share/glib-2.0/schemas
+
+  # restore bazzite's default: terra disabled in the shipped image
+  - type: script
+    snippets:
+      - dnf5 config-manager setopt terra.enabled=0

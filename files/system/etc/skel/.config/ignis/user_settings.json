@@ -1,0 +1,37 @@
+{
+    "appearance": {
+        "wallcolors": {
+            "wallpaper_path": "/home/user/Pictures/dracula-leaves-6272a4-dark.png",
+            "color_scheme": "monochrome",
+            "dark_mode": false,
+            "auto_dark": {}
+        }
+    },
+    "interface": {
+        "modules": {
+            "location": {},
+            "visibility": {},
+            "bar_id": {},
+            "options": {}
+        },
+        "bar": {
+            "side": "top",
+            "density": 1,
+            "floating": false,
+            "vertical": false
+        },
+        "bar2": {
+            "enabled": false,
+            "floating": false,
+            "side": "top",
+            "vertical": false
+        },
+        "notifications": {},
+        "launcher": {},
+        "misc": {}
+    },
+    "services": {
+        "recorder": {},
+        "osd": {}
+    }
+}

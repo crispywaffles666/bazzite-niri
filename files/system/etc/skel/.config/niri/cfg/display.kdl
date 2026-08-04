@@ -1,0 +1,23 @@
+// ────────────── Output Configuration ──────────────
+
+output "HP Inc. HP Z27q G3 CN41170Z70" {
+    mode "2560x1440@59.951"
+    position x=0 y=184
+    focus-at-startup
+}
+
+output "HP Inc. HP Z24n G3 CN41254B6B" {
+    mode "1920x1200@59.950"
+    position x=2560 y=0
+    transform "270"
+    layout {
+        default-column-width { proportion 1.0; }
+    }
+}
+
+workspace "1" { open-on-output "HP Inc. HP Z27q G3 CN41170Z70"; }
+workspace "2" { open-on-output "HP Inc. HP Z27q G3 CN41170Z70"; }
+workspace "3" { open-on-output "HP Inc. HP Z27q G3 CN41170Z70"; }
+
+workspace "4" { open-on-output "HP Inc. HP Z24n G3 CN41254B6B"; }
+workspace "5" { open-on-output "HP Inc. HP Z24n G3 CN41254B6B"; }

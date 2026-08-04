@@ -1,0 +1,67 @@
+#
+# ~/.bashrc
+#
+
+# PATH
+path_prepend() {
+  [[ ":$PATH:" == *":$1:"* ]] || PATH="$1:$PATH"
+}
+
+path_prepend "$HOME/bin"
+path_prepend "$HOME/.cargo/bin"
+path_prepend "$HOME/.local/bin"
+path_prepend "$HOME/.npm-global/bin"
+export PATH
+
+# env vars
+export EDITOR=nvim
+export MANPAGER="nvim +Man!"
+export ANDROID_HOME="$HOME/Android/Sdk"
+
+[[ $- != *i* ]] && return
+
+# Reset login shell hooks from /etc/profile.d/ that conflict with ble.sh
+PROMPT_COMMAND=()
+PS0=
+
+pfetch
+
+# completions
+[[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion
+
+# navigation
+shopt -s autocd
+
+# history
+HISTFILE=~/.bash_history
+HISTSIZE=10000
+HISTFILESIZE=10000
+HISTCONTROL=ignoredups
+shopt -s histappend
+
+# keybinds
+bind '"\e[1;2D": backward-word'
+bind '"\e[1;2C": forward-word'
+bind '"\e[1;5D": beginning-of-line'
+bind '"\e[1;5C": end-of-line'
+
+# aliases
+alias yay="paru"
+alias ls='ls --color=auto -A'
+alias grep='grep --color=auto'
+alias fastfetch='/usr/bin/fastfetch -c ~/.config/fastfetch/fastfetch.jsonc'
+alias neofetch='/usr/bin/fastfetch -c ~/.config/fastfetch/fastfetch.jsonc'
+alias cat="bat --theme=base16 --paging=never"
+
+ivpn-connect() {
+  ivpn connect -fastest -protocol WireGuard &&
+    sudo resolvectl dnsovertls wgivpn no &&
+    sudo resolvectl domain wgivpn '~.'
+}
+
+# prompt
+eval "$(starship init bash)"
+
+# fzf
+eval "$(fzf --bash)"
+[[ $BLE_VERSION ]] || [[ ! -r /usr/share/blesh/ble.sh ]] || source /usr/share/blesh/ble.sh --attach=prompt

@@ -1,0 +1,105 @@
+{
+  "font": {
+    "size": 12,
+    "name": "Overpass Nerd Font"
+  },
+  "colors": {
+    "bg": {
+      "0": "#282a36",
+      "1": "#343746",
+      "2": "#44475a",
+      "3": "#565970"
+    },
+    "fg": {
+      "0": "#f8f8f2",
+      "1": "#bfbfbf",
+      "2": "#6272a4"
+    },
+    "accent": "#bd93f9",
+    "blue": "#8be9fd",
+    "cyan": "#8be9fd",
+    "green": "#50fa7b",
+    "yellow": "#f1fa8c",
+    "orange": "#ffb86c",
+    "red": "#ff5555",
+    "purple": "#bd93f9"
+  },
+  "spacing": 10,
+  "shadow": true,
+  "radius": 8,
+  "icon-size": {
+    "normal": 20,
+    "small": 16,
+    "large": 32
+  },
+  "window": {
+    "padding": 15,
+    "opacity": 0.95,
+    "margin": 10,
+    "border": {
+      "width": 2,
+      "color": "#44475a"
+    },
+    "outline": {
+      "width": 2,
+      "color": "#6272a4"
+    },
+    "shadow": {
+      "offset": [
+        0,
+        0
+      ],
+      "blur": 10,
+      "spread": 0,
+      "color": "black",
+      "opacity": 0.5
+    }
+  },
+  "bar": {
+    "bg": "#282a36",
+    "opacity": 0.95,
+    "margin": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "padding": 6,
+    "spacing": 2,
+    "border": {
+      "width": 2,
+      "color": "#44475a"
+    },
+    "shadow": {
+      "offset": [
+        0,
+        0
+      ],
+      "blur": 10,
+      "spread": 0,
+      "color": "black",
+      "opacity": 0.5
+    },
+    "separator": {
+      "width": 2,
+      "color": "#44475a"
+    },
+    "button": {
+      "fg": "#f8f8f2",
+      "padding": [
+        0,
+        8
+      ],
+      "bg": {
+        "default": "#282a36",
+        "hover": "#343746",
+        "active": "#44475a"
+      },
+      "opacity": 1,
+      "border": {
+        "width": 0,
+        "color": "#44475a"
+      }
+    }
+  }
+}
