@@ -64,7 +64,9 @@ boot menu, or after booting: `sudo bootc rollback`.
 - Install via **brew** (intentionally not in the image): `neovim`, the LSP
   servers / formatters (`bash-language-server`, `pyright`,
   `typescript-language-server`, `yaml-language-server`, `stylua`, `taplo`),
-  `antidote`, `pfetch`.
+  `antidote`, `pfetch`. Also `npm install -g tree-sitter-cli` — brew's
+  `tree-sitter` formula is the library only; nvim's tree-sitter-manager
+  needs the CLI.
 - Firefox comes as a flatpak via `bazzite-flatpak-manager` (first boot).
 
 ## Package sources
