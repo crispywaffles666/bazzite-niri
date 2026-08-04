@@ -6,5 +6,6 @@ systemctl enable greetd.service
 systemctl set-default graphical.target
 
 # tuigreet --remember/--remember-session persist to /var/cache/tuigreet,
-# which must be writable by the greeter user (Fedora: greetd, uid 999)
-install -d -m 0755 -o greetd -g greetd /var/cache/tuigreet
+# writable by the greeter user (Fedora: greetd, uid 999). /var is NOT shipped
+# in the image on ostree systems — creating it here would only touch the
+# build container. Handled at boot by files/system/usr/lib/tmpfiles.d/tuigreet.conf.
