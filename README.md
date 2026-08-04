@@ -13,6 +13,9 @@ cosign, published to GHCR by GitHub Actions.
 - Kept from GNOME: `xdg-desktop-portal-gnome` (niri has no portal backend),
   `gnome-keyring` (secret service / SSH agent)
 
+> Working on this repo from a fresh session? Read [HANDOFF.md](HANDOFF.md)
+> first — build invariants, gotchas, and the tweak loop live there.
+
 ## Setup (fork / first push)
 
 1. Push this repo to your GitHub account.
