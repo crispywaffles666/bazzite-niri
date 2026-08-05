@@ -55,7 +55,7 @@ My keybinds to get you started:
 Go to noctalia settings > niri > enable `Type to Launch`.
 Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { toggle-overview; }` to `Super+Space repeat=false { spawn-sh "noctalia msg panel-toggle launcher"; }`.
 
-** If you do want to use my configs, you'll want to install these to get the full effect:** 
+**If you do want to use my configs, you'll want to install these to get the full effect:** 
 
 | What | Which config wants it | Install |
 |---|---|---|
