@@ -24,7 +24,7 @@ My keybinds to get you started:
 | Keybind | Action |
 |---|---|
 | `Mod+\` | Terminal (Ghostty) |
-| `Super+Space` / `Alt+Space` | App launcher(**see note below**) |
+| `Super+Space` / `Alt+Space` | App launcher (**see note below**) |
 | `Mod+E` | File manager (Nautilus) |
 | `Mod+B` | Browser (Firefox) |
 | `Mod+Q` | Close window |
