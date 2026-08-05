@@ -40,9 +40,12 @@ modules:
 
   # terra ships disabled in bazzite; enable it just for the build
   # (ghostty/awww/satty/yazi/starship live there, verified "Terra 44")
+  # brave's first-party rpm repo is added for brave-origin; both are
+  # disabled again at the end of the build
   - type: script
     snippets:
       - dnf5 config-manager setopt terra.enabled=1
+      - dnf5 config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
 
   # breeze-icon-theme must land in its own transaction: installing it in the
   # same rpm transaction as kf6-breeze-icons reproducibly fails cpio unpack
@@ -72,6 +75,9 @@ modules:
         - slurp
         - pavucontrol
         - cava
+        # browser: brave origin standalone (minimal build, extras compiled
+        # out; free on linux) from brave's first-party rpm repo
+        - brave-origin
         # power-profiles-daemon deliberately absent: base ships tuned-ppd,
         # which conflicts with it and already serves the same PPD DBus API
         # desktop tools
@@ -125,7 +131,9 @@ modules:
       - rm -f /usr/share/glib-2.0/schemas/00_org.gnome.shell.gschema.override /usr/share/glib-2.0/schemas/org.gnome.shell.gschema.override /usr/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override /usr/share/glib-2.0/schemas/10_org.gnome.desktop.screensaver.fedora.gschema.override /usr/share/glib-2.0/schemas/org.gnome.Ptyxis.fedora.gschema.override /usr/share/glib-2.0/schemas/zz0-0*.gschema.override
       - glib-compile-schemas --strict /usr/share/glib-2.0/schemas
 
-  # restore bazzite's default: terra disabled in the shipped image
+  # restore bazzite's default: terra disabled in the shipped image;
+  # brave's repo too (package updates flow through image rebuilds)
   - type: script
     snippets:
       - dnf5 config-manager setopt terra.enabled=0
+      - dnf5 config-manager setopt brave-browser.enabled=0
