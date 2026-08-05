@@ -55,6 +55,15 @@ My keybinds to get you started:
 Go to noctalia settings > niri > enable `Type to Launch`.
 Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { toggle-overview; }` to `Super+Space repeat=false { spawn-sh "noctalia msg panel-toggle launcher"; }`.
 
+** If you do want to use my configs, you'll want to install these to get the full effect:** 
+
+| What | Which config wants it | Install |
+|---|---|---|
+| `pfetch` | runs at every interactive bash/zsh startup (`.bashrc`, `.zshrc`) | `brew install pfetch-rs` (or `cargo install pfetch`) |
+| `antidote` | `.zshrc` sources it for zsh plugins if present | `brew install antidote` |
+| ble.sh | `.bashrc` sources `~/.local/share/blesh/ble.sh` if present (optional bash line editor) | build from source into `~/.local/share/blesh` |
+| Graphite GTK / Colloid icons | gschema override (see *First boot* above) | [Graphite-gtk-theme-dracula](https://github.com/crispywaffles666/Graphite-gtk-theme-dracula) + [Colloid-icon-theme](https://github.com/vinceliuice/Colloid-icon-theme) |
+
 ## About:
 
 This is a custom [bootc](https://bootc-dev.github.io/) image: **bazzite-gnome with GNOME
