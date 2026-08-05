@@ -24,7 +24,7 @@ My keybinds to get you started:
 | Keybind | Action |
 |---|---|
 | `Mod+\` | Terminal (Ghostty) |
-| `Super+Space` / `Alt+Space` | App launcher |
+| `Super+Space` / `Alt+Space` | App launcher(see note below) |
 | `Mod+E` | File manager (Nautilus) |
 | `Mod+B` | Browser (Firefox) |
 | `Mod+Q` | Close window |
@@ -33,14 +33,10 @@ My keybinds to get you started:
 | `Mod+Ctrl+H/L/K/J` (or Ctrl+arrows) | Move column/window |
 | `Mod+1`–`Mod+9` | Switch workspace |
 | `Mod+Ctrl+1`–`Mod+Ctrl+9` | Move column to workspace |
-| `Mod+Shift+arrows` | Focus another monitor |
 | `Mod+F` | Fullscreen window |
 | `Mod+T` | Toggle floating |
-| `Mod+W` | Toggle tabbed column display |
-| `Mod+C` | Center column |
 | `Mod+-` / `Mod+=` | Shrink/grow column width |
 | `Print` | Screenshot |
-| `Mod+Shift+P` | Power off monitors |
 | `Ctrl+Alt+Delete` | Quit niri |
 
 To get the launcher working:
@@ -48,6 +44,8 @@ Go to noctalia settings > niri > enable `Type to Launch`.
 Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { toggle-overview; }` to `Super+Space repeat=false { spawn-sh "noctalia msg panel-toggle launcher"; }`.
 
 **A warning to anyone looking to migrate their existing configs to this image:** If our dotfiles aren't similar enough (for example if you use tooling that i don't such as `swayidle`) this image won't include those services you need. Plan on adjusting your configs accordingly or you can fork and create your own image. 
+
+## About:
 
 This is a custom [bootc](https://bootc-dev.github.io/) image: **bazzite-gnome with GNOME
 stripped, running the niri compositor + noctalia shell**, replicating my CachyOS
