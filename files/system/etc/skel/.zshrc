@@ -1,21 +1,9 @@
 # priorities
 pfetch
 
-# antidote — location differs by distro/package source:
-# Arch package: /usr/share/zsh-antidote, brew: $prefix/share/antidote,
-# manual clone: ~/.antidote. Source the first one found.
-for _antidote_zsh in \
-  /usr/share/zsh-antidote/antidote.zsh \
-  /home/linuxbrew/.linuxbrew/share/antidote/antidote.zsh \
-  /home/linuxbrew/.linuxbrew/opt/antidote/share/antidote/antidote.zsh \
-  "$HOME/.antidote/antidote.zsh"; do
-  if [[ -r "$_antidote_zsh" ]]; then
-    source "$_antidote_zsh"
-    antidote load
-    break
-  fi
-done
-unset _antidote_zsh
+# antidote
+source /home/linuxbrew/.linuxbrew/opt/antidote/share/antidote/antidote.zsh
+antidote load
 
 # completions
 autoload -Uz compinit && compinit

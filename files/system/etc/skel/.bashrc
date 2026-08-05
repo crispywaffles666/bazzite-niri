@@ -64,4 +64,4 @@ eval "$(starship init bash)"
 
 # fzf
 eval "$(fzf --bash)"
-[[ $BLE_VERSION ]] || [[ ! -r /usr/share/blesh/ble.sh ]] || source /usr/share/blesh/ble.sh --attach=prompt
+[[ $BLE_VERSION ]] || [[ ! -r ~/.local/share/blesh/ble.sh ]] || source ~/.local/share/blesh/ble.sh --attach=prompt
