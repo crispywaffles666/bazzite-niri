@@ -2,6 +2,16 @@
 
 This is my personal bazzite image which strips out most of GNOME and instead replaces it with niri and the required tooling and services for my dots. If you want to use it, my configs live in `/etc/skel` so any new user will inherit them, or you can copy them over to your existing user's `~/.config` and use them to get yourself started.
 
+**A warning to anyone looking to migrate their existing configs to this image:** 
+If our dotfiles aren't similar enough (for example if you use tooling that i don't such as `swayidle`) this image won't include those services you need. Plan on adjusting your configs accordingly or you can fork and create your own image. 
+
+## Rebasing onto this image
+
+```bash
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/crispywaffles666/bazzite-niri:latest
+sudo systemctl reboot
+```
+
 If you've rebased to this image and are stuck in niri with a bad config on an existing user:
 
 1. Switch to a TTY with `Ctrl+Alt+F3` and log in.
@@ -43,9 +53,6 @@ My keybinds to get you started:
 Go to noctalia settings > niri > enable `Type to Launch`.
 Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { toggle-overview; }` to `Super+Space repeat=false { spawn-sh "noctalia msg panel-toggle launcher"; }`.
 
-**A warning to anyone looking to migrate their existing configs to this image:** 
-If our dotfiles aren't similar enough (for example if you use tooling that i don't such as `swayidle`) this image won't include those services you need. Plan on adjusting your configs accordingly or you can fork and create your own image. 
-
 ## About:
 
 This is a custom [bootc](https://bootc-dev.github.io/) image: **bazzite-gnome with GNOME
@@ -60,16 +67,6 @@ cosign, published to GHCR by GitHub Actions.
 - Kept from GNOME: `xdg-desktop-portal-gnome` (niri has no portal backend),
   `gnome-keyring` (secret service / SSH agent) `nautilus` (file manager)
  
-## Rebasing onto this image
-
-```bash
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/crispywaffles666/bazzite-niri:latest
-sudo systemctl reboot
-```
-
-`/var` survives the rebase: home directories, linuxbrew, distrobox containers,
-and flatpaks are all untouched.
-
 **Rollback:** bootc keeps the previous deployment. Pick the old entry in the
 boot menu, or after booting: `sudo bootc rollback`.
 
