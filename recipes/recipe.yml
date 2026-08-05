@@ -78,7 +78,6 @@ modules:
         - qt5ct
         - qt6ct
         - seahorse
-        - sassc
         - xterm
         # cli tools (neovim + LSPs deliberately excluded: installed via brew)
         - zsh
@@ -89,6 +88,15 @@ modules:
         - stow
         - yazi
         - starship
+
+  # localsearch (GNOME/tracker indexer) is a hard Requires of nautilus, so it
+  # must stay in the image — but its extractor segfaults in a loop on this
+  # GNOME-less setup (972+ coredumps). Mask its user units globally so no
+  # session ever starts the miner pipeline. nautilus falls back to plain
+  # filename search when the indexer is absent.
+  - type: script
+    snippets:
+      - systemctl --global mask localsearch-3.service localsearch-writeback-3.service localsearch-control-3.service
 
   # strip the GNOME desktop (keeps xdg-desktop-portal-gnome + gnome-keyring),
   # then enable greetd as the display manager
