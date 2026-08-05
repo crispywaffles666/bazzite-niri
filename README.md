@@ -39,11 +39,12 @@ My keybinds to get you started:
 | `Print` | Screenshot |
 | `Ctrl+Alt+Delete` | Quit niri |
 
-To get the launcher working:
+**To get the launcher working:**
 Go to noctalia settings > niri > enable `Type to Launch`.
 Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { toggle-overview; }` to `Super+Space repeat=false { spawn-sh "noctalia msg panel-toggle launcher"; }`.
 
-**A warning to anyone looking to migrate their existing configs to this image:** If our dotfiles aren't similar enough (for example if you use tooling that i don't such as `swayidle`) this image won't include those services you need. Plan on adjusting your configs accordingly or you can fork and create your own image. 
+**A warning to anyone looking to migrate their existing configs to this image:** 
+If our dotfiles aren't similar enough (for example if you use tooling that i don't such as `swayidle`) this image won't include those services you need. Plan on adjusting your configs accordingly or you can fork and create your own image. 
 
 ## About:
 
