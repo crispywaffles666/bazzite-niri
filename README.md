@@ -1,20 +1,79 @@
 # bazzite-niri
 
-Custom [bootc](https://bootc-dev.github.io/) image: **bazzite-gnome with GNOME
-stripped, running the niri compositor + noctalia shell**, replicating a CachyOS
+This is my personal bazzite image which strips out most of GNOME and instead replaces it with niri and the required tooling and services for my dots. If you want to use it, my configs live in `/etc/skel` so any new user will inherit them, or you can copy them over to your existing user's `~/.config` and use them to get yourself started.
+
+If you've rebased to this image and are stuck in niri with a bad config on an existing user:
+
+1. Switch to a TTY with `Ctrl+Alt+F3` and log in.
+2. Copy the niri config, the noctalia shell config it launches, and the helper
+   scripts its autostart expects:
+
+   ```bash
+   cp -r /etc/skel/.config/niri ~/.config/
+   cp -r /etc/skel/.config/noctalia ~/.config/
+   cp -r /etc/skel/.local/bin ~/.local/
+   ```
+
+3. niri live-reloads its config, so switch back to the graphical session
+   (`Ctrl+Alt+F2`) and you should have a working environment. Copy more of
+   `/etc/skel` later if you want the full setup (terminal, shell, and other
+   app configs).
+
+My keybinds to get you started:
+
+| Keybind | Action |
+|---|---|
+| `Mod+Shift+Escape` | Show the full hotkey overlay |
+| `Mod+\` | Terminal (Ghostty) |
+| `Super+Space` / `Alt+Space` | App launcher |
+| `Mod+E` | File manager (Nautilus) |
+| `Mod+B` | Browser (Firefox) |
+| `Mod+Q` | Close window |
+| `Mod+H` / `Mod+L` (or ←/→) | Focus column left/right |
+| `Mod+K` / `Mod+J` (or ↑/↓) | Focus window up/down |
+| `Mod+Ctrl+H/L/K/J` (or Ctrl+arrows) | Move column/window |
+| `Mod+1`–`Mod+9` | Switch workspace |
+| `Mod+Ctrl+1`–`Mod+Ctrl+9` | Move column to workspace |
+| `Mod+Shift+arrows` | Focus another monitor |
+| `Mod+F` | Fullscreen window |
+| `Mod+T` | Toggle floating |
+| `Mod+W` | Toggle tabbed column display |
+| `Mod+C` | Center column |
+| `Mod+-` / `Mod+=` | Shrink/grow column width |
+| `Print` | Screenshot |
+| `Mod+Shift+P` | Power off monitors |
+| `Ctrl+Alt+Delete` | Quit niri |
+
+To get the launcher working:
+Go to noctalia settings > niri > enable `Type to Launch`.
+Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { toggle-overview; }` to `Super+Space repeat=false { spawn-sh "noctalia msg panel-toggle launcher"; }`.
+
+**A warning to anyone looking to migrate their existing configs to this image:** If our dotfiles aren't similar enough (for example if you use tooling that i don't such as `swayidle`) this image won't include those services you need. Plan on adjusting your configs accordingly or you can fork and create your own image. 
+
+This is a custom [bootc](https://bootc-dev.github.io/) image: **bazzite-gnome with GNOME
+stripped, running the niri compositor + noctalia shell**, replicating my CachyOS
 desktop setup. Built with [BlueBuild](https://blue-build.org), signed with
 cosign, published to GHCR by GitHub Actions.
 
 - Base: `ghcr.io/ublue-os/bazzite-gnome:stable` (Fedora 44)
 - Compositor: `niri` + `xwayland-satellite` (official Fedora repos)
-- Shell: `noctalia` v5 (official Fedora repos, native binary — no quickshell)
-- Display manager: `greetd` + `tuigreet` (GDM removed)
-- File manager: `nautilus` (kept deliberately)
+- Shell: `noctalia` v5 (official Fedora repos)
+- Display manager: `greetd` + `tuigreet` (GDM removed; both from the official Fedora repos)
 - Kept from GNOME: `xdg-desktop-portal-gnome` (niri has no portal backend),
-  `gnome-keyring` (secret service / SSH agent)
+  `gnome-keyring` (secret service / SSH agent) `nautilus` (file manager)
+ 
+## Rebasing onto this image
 
-> Working on this repo from a fresh session? Read [HANDOFF.md](HANDOFF.md)
-> first — build invariants, gotchas, and the tweak loop live there.
+```bash
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/crispywaffles666/bazzite-niri:latest
+sudo systemctl reboot
+```
+
+`/var` survives the rebase: home directories, linuxbrew, distrobox containers,
+and flatpaks are all untouched.
+
+**Rollback:** bootc keeps the previous deployment. Pick the old entry in the
+boot menu, or after booting: `sudo bootc rollback`.
 
 ## Setup (fork / first push)
 
@@ -34,40 +93,19 @@ cosign, published to GHCR by GitHub Actions.
 If you skip step 2, the workflow still builds and pushes, but images are
 unsigned and `--enforce-container-sigpolicy` rebases will fail.
 
-## Rebasing onto this image
-
-```bash
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/crispywaffles666/bazzite-niri:latest
-sudo systemctl reboot
-```
-
-`/var` survives the rebase: home directories, linuxbrew, distrobox containers,
-and flatpaks are all untouched.
-
-**Rollback:** bootc keeps the previous deployment. Pick the old entry in the
-boot menu, or after booting: `sudo bootc rollback`.
-
 ## First boot
 
-- `/etc/skel` contains the full dotfiles set, so **new** users get niri,
+- `/etc/skel` contains my personal dotfiles, so **new** users get niri,
   noctalia, ghostty/alacritty, shell configs, and `~/.local/bin` helpers by
-  default. An **existing** user (rebase path) is unaffected — clone the
-  dotfiles repo and `stow -t ~ .` as usual.
+  default. An **existing** user (rebase path) is unaffected.
 - GTK theming defaults are set via gschema override
   (`/usr/share/glib-2.0/schemas/zz_bazzite-niri.gschema.override`):
   dark preference, `Overpass Nerd Font`, Graphite gtk-theme +
   Colloid icon-theme. The **themes themselves are not in the image** — install
-  Graphite-purple-Dark-dracula / Colloid-Purple-Dracula per the dotfiles
-  README; until then GTK apps fall back to defaults.
-- Default login shell stays `bash` (ublue guidance). Set zsh in ghostty
-  (`command = zsh`) or `chsh` if you want it everywhere.
-- Install via **brew** (intentionally not in the image): `neovim`, the LSP
-  servers / formatters (`bash-language-server`, `pyright`,
-  `typescript-language-server`, `yaml-language-server`, `stylua`, `taplo`),
-  `antidote`, `pfetch`. Also `npm install -g tree-sitter-cli` — brew's
-  `tree-sitter` formula is the library only; nvim's tree-sitter-manager
-  needs the CLI.
-- Firefox comes as a flatpak via `bazzite-flatpak-manager` (first boot).
+  Graphite-purple-Dark-dracula / Colloid-Purple-Dracula — from
+  [Graphite-gtk-theme-dracula](https://github.com/crispywaffles666/Graphite-gtk-theme-dracula)
+  (my fork of the Graphite GTK theme with the dracula variant) and
+  [Colloid-icon-theme](https://github.com/vinceliuice/Colloid-icon-theme).
 
 ## Package sources
 
@@ -81,30 +119,6 @@ GNOME removal is done by `files/scripts/remove-gnome.sh`: an explicit list
 filtered through `rpm -q`, `clean_requirements_on_remove=false` (dnf5's remove
 cascade ignores install reasons — without this, nautilus is destroyed as an
 orphan of `nautilus-gsconnect`), then `dnf5 autoremove`.
-
-## Known gaps / deliberate deviations from the CachyOS setup
-
-- **pwvucontrol** — exists nowhere for Fedora 44. `pavucontrol` instead; the
-  one config reference (`noctalia` `middleClickCommand`) already falls back to
-  it, no config change needed.
-- **power-profiles-daemon** — conflicts with the base image's `tuned-ppd`,
-  which serves the same DBus API to noctalia. Not installed.
-- **localsearch / tinysparql** — *kept*: Fedora nautilus hard-requires both
-  (Arch makes tracker optional). One indexing daemon more than the CachyOS box.
-- **ble.sh** — not packaged; install from source if you ever want it.
-  `.bashrc` is patched to skip it silently when absent.
-- **ivpn** — skipped by owner decision.
-- **gnome-themes-extra** — retired in F44; only needed to *build* the Graphite
-  theme, which is installed manually anyway.
-- **matugen** — not installed: nothing invokes it at runtime (noctalia does
-  its own color generation), and the seeded config predates matugen v4.
-- **Material Symbols** font — only referenced by legacy ignis configs; skipped.
-- **kitty / foot** — configs are seeded (inert), binaries intentionally absent.
-- **Qt theming via qt5ct/qt6ct** — packages installed; the legacy matugen
-  templates targeting them are inert (matugen itself is not installed).
-- `~/.config/niri/cfg/display.kdl` and the `~/.local/bin/auto-fullwidth-dp3.sh`
-  helper are machine-specific (monitor names/EDID serials) — correct for the
-  reference machine, review before imaging other hardware.
 
 ## Local build
 
