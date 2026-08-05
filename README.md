@@ -23,7 +23,6 @@ My keybinds to get you started:
 
 | Keybind | Action |
 |---|---|
-| `Mod+Shift+Escape` | Show the full hotkey overlay |
 | `Mod+\` | Terminal (Ghostty) |
 | `Super+Space` / `Alt+Space` | App launcher |
 | `Mod+E` | File manager (Nautilus) |
