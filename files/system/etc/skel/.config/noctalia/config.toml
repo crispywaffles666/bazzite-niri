@@ -8,7 +8,7 @@ corner_radius_scale   = 1.0
 font_family           = "Overpass Nerd Font"
 polkit_agent          = true
 telemetry_enabled     = false
-avatar_path           = "/home/user/.face"
+avatar_path           = "~/.face"
 password_style        = "default"
 clipboard_enabled     = true
 app_icon_colorize     = false
@@ -182,7 +182,7 @@ fill_color          = "#000000"
 transition          = ["honeycomb"]
 transition_duration = 1500
 edge_smoothness     = 0.05
-directory           = "/home/user/Pictures/Wallpapers"
+directory           = "~/Pictures/Wallpapers"
 
 [wallpaper.automation]
 enabled          = false

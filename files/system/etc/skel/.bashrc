@@ -24,7 +24,7 @@ export ANDROID_HOME="$HOME/Android/Sdk"
 PROMPT_COMMAND=()
 PS0=
 
-pfetch
+command -v pfetch >/dev/null && pfetch
 
 # completions
 [[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion

@@ -1,5 +1,5 @@
 # priorities
-pfetch
+command -v pfetch >/dev/null && pfetch
 
 # antidote (only if installed via brew)
 [[ -r /home/linuxbrew/.linuxbrew/opt/antidote/share/antidote/antidote.zsh ]] && \
@@ -63,4 +63,4 @@ ivpn-connect() {
 eval "$(starship init zsh)"
 
 # kimi-code
-export PATH="/home/user/.kimi-code/bin:$PATH"
+export PATH="$HOME/.kimi-code/bin:$PATH"
