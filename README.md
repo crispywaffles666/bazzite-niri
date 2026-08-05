@@ -11,6 +11,8 @@ If our dotfiles aren't similar enough (for example if you use tooling that i don
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/crispywaffles666/bazzite-niri:latest
 sudo systemctl reboot
 ```
+**Rollback:** bootc keeps the previous deployment. Pick the old entry in the
+boot menu, or after booting: `sudo bootc rollback`.
 
 If you've rebased to this image and are stuck in niri with a bad config on an existing user:
 
@@ -66,9 +68,6 @@ cosign, published to GHCR by GitHub Actions.
 - Display manager: `greetd` + `tuigreet` (GDM removed; both from the official Fedora repos)
 - Kept from GNOME: `xdg-desktop-portal-gnome` (niri has no portal backend),
   `gnome-keyring` (secret service / SSH agent) `nautilus` (file manager)
- 
-**Rollback:** bootc keeps the previous deployment. Pick the old entry in the
-boot menu, or after booting: `sudo bootc rollback`.
 
 ## Setup (fork / first push)
 
