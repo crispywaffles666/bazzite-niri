@@ -14,7 +14,7 @@ sudo systemctl reboot
 **Rollback:** bootc keeps the previous deployment. Pick the old entry in the
 boot menu, or after booting: `sudo bootc rollback`.
 
-If you've rebased to this image and are stuck in niri with a bad config on an existing user:
+**If you've rebased to this image and are stuck in niri with a bad config on an existing user:**
 
 1. Switch to a TTY with `Ctrl+Alt+F3` and log in.
 2. Copy the niri config, the noctalia shell config it launches, and the helper
