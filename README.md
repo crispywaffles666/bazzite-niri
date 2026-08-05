@@ -73,7 +73,7 @@ boot menu, or after booting: `sudo bootc rollback`.
 
 | Source | Packages |
 |---|---|
-| Fedora 44 | niri, xwayland-satellite, noctalia, greetd, tuigreet, alacritty, matugen, cliphist, brightnessctl, playerctl, inotify-tools, slurp, pavucontrol, cava, qt5ct, qt6ct, seahorse, sassc, xterm, zsh, bat, micro, geany, ripgrep, stow, overpass-fonts, xdg-desktop-portal-gnome, gnome-keyring, nautilus |
+| Fedora 44 | niri, xwayland-satellite, noctalia, greetd, tuigreet, alacritty, cliphist, brightnessctl, playerctl, inotify-tools, slurp, pavucontrol, cava, qt5ct, qt6ct, seahorse, sassc, xterm, zsh, bat, micro, geany, ripgrep, stow, overpass-fonts, xdg-desktop-portal-gnome, gnome-keyring, nautilus |
 | terra (enabled at build only) | ghostty, awww, satty, yazi, starship |
 | Vendored at build | Overpass Nerd Font (pinned Arch package `otf-overpass-nerd-3.4.0-2`, sha256-verified — not in Fedora/COPR/nerd-fonts release zips) |
 
@@ -96,13 +96,12 @@ orphan of `nautilus-gsconnect`), then `dnf5 autoremove`.
 - **ivpn** — skipped by owner decision.
 - **gnome-themes-extra** — retired in F44; only needed to *build* the Graphite
   theme, which is installed manually anyway.
-- **matugen** — installed per dotfiles README, but note it isn't actually
-  installed on the reference machine, nothing invokes it at runtime (noctalia
-  does its own color generation), and the seeded config predates matugen v4.
+- **matugen** — not installed: nothing invokes it at runtime (noctalia does
+  its own color generation), and the seeded config predates matugen v4.
 - **Material Symbols** font — only referenced by legacy ignis configs; skipped.
 - **kitty / foot** — configs are seeded (inert), binaries intentionally absent.
-- **matugen/GTK Qt theming via qt5ct/qt6ct** — packages installed; the matugen
-  templates targeting them only run if you invoke matugen manually.
+- **Qt theming via qt5ct/qt6ct** — packages installed; the legacy matugen
+  templates targeting them are inert (matugen itself is not installed).
 - `~/.config/niri/cfg/display.kdl` and the `~/.local/bin/auto-fullwidth-dp3.sh`
   helper are machine-specific (monitor names/EDID serials) — correct for the
   reference machine, review before imaging other hardware.

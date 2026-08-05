@@ -65,7 +65,6 @@ modules:
         - ghostty
         - awww
         - satty
-        - matugen
         - cliphist
         - brightnessctl
         - playerctl
