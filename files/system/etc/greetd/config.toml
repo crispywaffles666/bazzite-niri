@@ -4,5 +4,5 @@ vt = 2
 [default_session]
 command = "tuigreet --time --time-format '%I:%M %p' --remember --remember-session --asterisks --theme 'border=#bd93f9;text=#f8f8f2;prompt=#50fa7b;time=#6272a4;action=#ff79c6;button=#bd93f9;container=#282a36;input=#f8f8f2' --cmd niri-session"
 # Arch's greetd docs use a "greeter" user; Fedora's greetd package creates
-# "greetd" (uid 999) via sysusers instead — use that, nothing creates "greeter" here
+# "greetd" via sysusers instead (dynamic uid — refer to it by name, not number)
 user = "greetd"
