@@ -99,10 +99,13 @@ modules:
   # must stay in the image — but its extractor segfaults in a loop on this
   # GNOME-less setup (972+ coredumps). Mask its user units globally so no
   # session ever starts the miner pipeline. nautilus falls back to plain
-  # filename search when the indexer is absent.
+  # filename search when the indexer is absent. The glob (not fixed unit
+  # names) keeps the masks working when a tinysparql ABI bump renames the
+  # units (localsearch-3.service -> localsearch-4.service); systemctl mask
+  # can't glob, so create the /dev/null symlinks directly.
   - type: script
     snippets:
-      - systemctl --global mask localsearch-3.service localsearch-writeback-3.service localsearch-control-3.service
+      - for u in /usr/lib/systemd/user/localsearch*.service; do ln -sf /dev/null "/etc/systemd/user/$(basename "$u")"; done
 
   # strip the GNOME desktop (keeps xdg-desktop-portal-gnome + gnome-keyring),
   # then enable greetd as the display manager
