@@ -5,6 +5,12 @@ This is my personal bazzite image which strips out most of GNOME and instead rep
 **A warning to anyone looking to migrate their existing configs to this image:** 
 If our dotfiles aren't similar enough (for example if you use tooling that i don't such as `swayidle`) this image won't include those services you need. Plan on adjusting your configs accordingly or you can fork and create your own image. 
 
+## Standout features unique to this image:
+- **All of bazzite, minus GNOME:** keeps the kernel, gaming stack, codecs, and hardware support that from-scratch niri images make you reassemble yourself.
+- **Actually strips the base DE:** many similar images based on bazzite simply layer the compositor on top of the unused DE session. GNOME is completely removed from this image aside from a couple packages that support the niri environment (nautilus, keyring, portals).
+- **Opts for greetd + tuigreet:** using this as our display manager means we avoid installing much of the GNOME/KDE stack that comes with using their Display Managers.
+- **Avoids COPR:** All packages are sourced from either the official Fedora repos or terra.
+
 ## Rebasing onto this image
 
 ```bash
