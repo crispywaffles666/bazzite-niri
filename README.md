@@ -8,7 +8,7 @@ This image is built around Noctalia shell. Noctalia provides most of the desktop
 
 If your existing config depends on a different set of shell components, expect to layer the packages you need or fork this image and add them to the build.
 
-## Standout features unique to this image:
+## Standout features of this image:
 - **All of bazzite, minus GNOME:** keeps the kernel, gaming stack, codecs, and hardware support that from-scratch niri images make you reassemble yourself.
 - **Actually strips the base DE:** many similar images based on bazzite simply layer the compositor on top of the unused DE session. GNOME is completely removed from this image aside from a couple packages that support the niri environment (nautilus, keyring, portals).
 - **greetd + tuigreet as Display Manager:** using this as our display manager means we avoid installing much of the GNOME/KDE stack that comes with using their Display Managers.
