@@ -28,9 +28,13 @@ sudo systemctl reboot
 **Rollback:** bootc keeps the previous deployment. Pick the old entry in the
 boot menu, or after booting: `sudo bootc rollback`.
 
-**If you've rebased to this image and are stuck in niri with a bad config on an existing user:**
+<details>
+<summary><strong>Rebased and stuck in niri with a bad config?</strong></summary>
+
+If you rebase to this image without planning ahead. You may find yourself stuck in niri unable to do anything. In that case:
 
 1. Switch to a TTY with `Ctrl+Alt+F3` and log in.
+
 2. Copy the niri config, the noctalia shell config it launches, and the helper
    scripts its autostart expects:
 
@@ -44,6 +48,23 @@ boot menu, or after booting: `sudo bootc rollback`.
    (`Ctrl+Alt+F2`) and you should have a working environment. Copy more of
    `/etc/skel` later if you want the full setup (terminal, shell, and other
    app configs).
+
+</details>
+
+## Copying my configs:
+Whether you want them just to get a working environment, or to build off of; the bare minimum niri config, the noctalia shell config, and helper scripts can be copied by:
+
+   ```bash
+   cp -r /etc/skel/.config/niri ~/.config/
+   cp -r /etc/skel/.config/noctalia ~/.config/
+   cp -r /etc/skel/.local/bin ~/.local/
+   ```
+From there you can look at what else is included and decide how much you want to copy:
+
+   ```bash
+   ls /etc/skel
+   ls /etc/skel/.config
+   ```
 
 My keybinds to get you started:
 
@@ -68,7 +89,7 @@ My keybinds to get you started:
 Go to noctalia settings > niri > enable `Type to Launch`.
 Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { toggle-overview; }` to `Super+Space repeat=false { spawn-sh "noctalia msg panel-toggle launcher"; }`.
 
-**If you do want to use my configs, you'll want to install these to get the full effect:** 
+**A few things you might want to install depending on how much you're copying my configs:** 
 
 | What | Which config wants it | Install |
 |---|---|---|
@@ -98,6 +119,20 @@ cosign, published to GHCR by GitHub Actions.
 - Kept from GNOME: `xdg-desktop-portal-gnome` (niri has no portal backend),
   `gnome-keyring` (secret service / SSH agent) `nautilus` (file manager)
 
+## Package sources
+
+| Source | Packages |
+|---|---|
+| Fedora 44 | niri, xwayland-satellite, noctalia, greetd, tuigreet, alacritty, cliphist, brightnessctl, playerctl, inotify-tools, slurp, pavucontrol, cava, qt5ct, qt6ct, seahorse, sassc, xterm, zsh, bat, micro, geany, ripgrep, stow, overpass-fonts, xdg-desktop-portal-gnome, gnome-keyring, nautilus |
+| terra (enabled at build only) | ghostty, awww, satty, yazi, starship |
+| Vendored at build | Overpass Nerd Font (pinned Arch package `otf-overpass-nerd-3.4.0-2`, sha256-verified — not in Fedora/COPR/nerd-fonts release zips) |
+
+GNOME removal is done by `files/scripts/remove-gnome.sh`: an explicit list
+filtered through `rpm -q`, `clean_requirements_on_remove=false` (dnf5's remove
+cascade ignores install reasons — without this, nautilus is destroyed as an
+orphan of `nautilus-gsconnect`), then `dnf5 autoremove`.
+
+
 ## Setup (fork / first push)
 
 1. Push this repo to your GitHub account.
@@ -115,33 +150,6 @@ cosign, published to GHCR by GitHub Actions.
 
 If you skip step 2, the workflow still builds and pushes, but images are
 unsigned and `--enforce-container-sigpolicy` rebases will fail.
-
-## First boot
-
-- `/etc/skel` contains my personal dotfiles, so **new** users get niri,
-  noctalia, ghostty/alacritty, shell configs, and `~/.local/bin` helpers by
-  default. An **existing** user (rebase path) is unaffected.
-- GTK theming defaults are set via gschema override
-  (`/usr/share/glib-2.0/schemas/zz_bazzite-niri.gschema.override`):
-  dark preference, `Overpass Nerd Font`, Graphite gtk-theme +
-  Colloid icon-theme. The **themes themselves are not in the image** — install
-  Graphite-purple-Dark-dracula / Colloid-Purple-Dracula — from
-  [Graphite-gtk-theme-dracula](https://github.com/crispywaffles666/Graphite-gtk-theme-dracula)
-  (my fork of the Graphite GTK theme with the dracula variant) and
-  [Colloid-icon-theme](https://github.com/vinceliuice/Colloid-icon-theme).
-
-## Package sources
-
-| Source | Packages |
-|---|---|
-| Fedora 44 | niri, xwayland-satellite, noctalia, greetd, tuigreet, alacritty, cliphist, brightnessctl, playerctl, inotify-tools, slurp, pavucontrol, cava, qt5ct, qt6ct, seahorse, sassc, xterm, zsh, bat, micro, geany, ripgrep, stow, overpass-fonts, xdg-desktop-portal-gnome, gnome-keyring, nautilus |
-| terra (enabled at build only) | ghostty, awww, satty, yazi, starship |
-| Vendored at build | Overpass Nerd Font (pinned Arch package `otf-overpass-nerd-3.4.0-2`, sha256-verified — not in Fedora/COPR/nerd-fonts release zips) |
-
-GNOME removal is done by `files/scripts/remove-gnome.sh`: an explicit list
-filtered through `rpm -q`, `clean_requirements_on_remove=false` (dnf5's remove
-cascade ignores install reasons — without this, nautilus is destroyed as an
-orphan of `nautilus-gsconnect`), then `dnf5 autoremove`.
 
 ## Local build
 
