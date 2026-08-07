@@ -74,9 +74,6 @@ scale = 1.2
 match = "DP-3"
 scale = 1.0
 
-[bar.default.dead_zone]
-right_command = ""
-
 # ── Widgets ──
 
 [widget.workspaces]
