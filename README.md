@@ -10,6 +10,11 @@ If our dotfiles aren't similar enough (for example if you use tooling that i don
 - **Actually strips the base DE:** many similar images based on bazzite simply layer the compositor on top of the unused DE session. GNOME is completely removed from this image aside from a couple packages that support the niri environment (nautilus, keyring, portals).
 - **Opts for greetd + tuigreet:** using this as our display manager means we avoid installing much of the GNOME/KDE stack that comes with using their Display Managers.
 - **Avoids COPR:** All packages are sourced from either the official Fedora repos or terra.
+- **Replicates a tuned Arch/CachyOS desktop:** My lived-in Niri/Noctalia CachyOS desktop was used as the reference for this image:
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/e14954d4-3e13-43b4-bfed-70ff6754043c" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/bb7e002a-31e3-47b4-9be7-4c18902cd7cb" />
+
+
 
 ## Rebasing onto this image
 
