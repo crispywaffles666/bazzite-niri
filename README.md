@@ -2,8 +2,11 @@
 
 This is my personal bazzite image which strips out most of GNOME and instead replaces it with niri and the required tooling and services for my dots. If you want to use it, my configs live in `/etc/skel` so any new user will inherit them, or you can copy them over to your existing user's `~/.config` and use them to get yourself started.
 
-**A warning to anyone looking to migrate their existing configs to this image:** 
-If our dotfiles aren't similar enough (for example if you use tooling that i don't such as `swayidle`) this image won't include those services you need. Plan on adjusting your configs accordingly or you can fork and create your own image. 
+**A note if you're bringing your own niri config:**
+
+This image is built around noctalia shell. Noctalia provides most of the desktop stack (bar, launcher, notifications, lock screen, idle management). Because of that, alternatives such as waybar, fuzzel, swaylock, and swayidle are not included.
+
+If your existing config depends on a different set of shell components, expect to layer the packages you need or fork this image and add them to the build.
 
 ## Standout features unique to this image:
 - **All of bazzite, minus GNOME:** keeps the kernel, gaming stack, codecs, and hardware support that from-scratch niri images make you reassemble yourself.
@@ -49,7 +52,6 @@ My keybinds to get you started:
 | `Mod+\` | Terminal (Ghostty) |
 | `Super+Space` / `Alt+Space` | App launcher (**see note below**) |
 | `Mod+E` | File manager (Nautilus) |
-| `Mod+B` | Browser (Firefox) |
 | `Mod+Q` | Close window |
 | `Mod+H` / `Mod+L` (or ←/→) | Focus column left/right |
 | `Mod+K` / `Mod+J` (or ↑/↓) | Focus window up/down |
