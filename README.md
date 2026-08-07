@@ -1,6 +1,6 @@
 # bazzite-niri
 
-This is my personal bazzite image which strips out most of GNOME and instead replaces it with niri and the required tooling and services for my dots. If you want to use it, my configs live in `/etc/skel` so any new user will inherit them, or you can copy them over to your existing user's `~/.config` and use them to get yourself started.
+This is my personal bazzite image which strips out most of GNOME and instead replaces it with niri and the required tooling and services for my dots. If you want to use it, you can rebase and use my configs to get yourself started. My configs live in `/etc/skel` so any new user will inherit them, or you can copy them over to your existing user's `~/.config` and use them to get yourself started.
 
 **A note if you're bringing your own niri config:**
 
