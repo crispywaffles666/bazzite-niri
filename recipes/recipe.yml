@@ -1,5 +1,5 @@
 # Custom image: bazzite-gnome with GNOME stripped, niri + noctalia desktop
-# environment layered in (parity with the owner's CachyOS setup).
+# environment layered in.
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 name: bazzite-niri
@@ -47,7 +47,7 @@ modules:
       - dnf5 config-manager setopt terra.enabled=1
       - dnf5 config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
 
-  # Phase 2: desktop shell + user's desktop environment (CachyOS parity).
+  # Phase 2: desktop shell + desktop environment.
   # ghostty/satty/yazi/starship come from terra; everything else is from the
   # official Fedora repos.
   - type: dnf
@@ -65,8 +65,7 @@ modules:
         - wl-clipboard
         - pavucontrol
         - cava
-        # browser: brave-origin (minimal build, extras compiled out), from
-        # brave's first-party rpm repo
+        # browser: brave-origin from brave's first-party rpm repo
         - brave-origin
         # power-profiles-daemon deliberately absent: base ships tuned-ppd,
         # which conflicts with it and already serves the same PPD DBus API
