@@ -19,8 +19,8 @@ EXPLICIT=(
     gnome-disk-utility gnome-system-monitor gnome-tour gnome-software
     gnome-initial-setup gnome-terminal ptyxis yelp gnome-user-docs
     gnome-browser-connector gnome-characters
-    # indexers (NOT tinysparql/localsearch: Fedora nautilus hard-requires
-    # both, unlike Arch where tracker is optional - they must stay)
+    # indexers: tinysparql/localsearch NOT removed — Fedora's nautilus
+    # hard-requires both (unlike Arch, where tracker is optional)
     # bazzite's gnome-only additions
     steamdeck-gnome-presets steamdeck-backgrounds
     gnome-search-yafti nautilus-gsconnect rom-properties-gtk4
