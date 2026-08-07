@@ -12,7 +12,7 @@ If your existing config depends on a different set of shell components, expect t
 - **All of bazzite, minus GNOME:** keeps the kernel, gaming stack, codecs, and hardware support that from-scratch niri images make you reassemble yourself.
 - **Actually strips the base DE:** many similar images based on bazzite simply layer the compositor on top of the unused DE session. GNOME is completely removed from this image aside from a couple packages that support the niri environment (nautilus, keyring, portals).
 - **Opts for greetd + tuigreet:** using this as our display manager means we avoid installing much of the GNOME/KDE stack that comes with using their Display Managers.
-- **Avoids COPR:** All packages are sourced from either the official Fedora repos or terra.
+- **Avoids COPR:** All packages are sourced from the official Fedora repos, terra, or brave's first-party rpm repo.
 - **Replicates a tuned Arch/CachyOS desktop:** My lived-in Niri/Noctalia CachyOS desktop was used as the reference for this image:
 <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/e14954d4-3e13-43b4-bfed-70ff6754043c" />
 <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/bb7e002a-31e3-47b4-9be7-4c18902cd7cb" />
@@ -123,8 +123,9 @@ cosign, published to GHCR by GitHub Actions.
 
 | Source | Packages |
 |---|---|
-| Fedora 44 | niri, xwayland-satellite, noctalia, greetd, tuigreet, alacritty, cliphist, brightnessctl, playerctl, inotify-tools, slurp, pavucontrol, cava, qt5ct, qt6ct, seahorse, sassc, xterm, zsh, bat, micro, geany, ripgrep, stow, overpass-fonts, xdg-desktop-portal-gnome, gnome-keyring, nautilus |
-| terra (enabled at build only) | ghostty, awww, satty, yazi, starship |
+| Fedora 44 | niri, xwayland-satellite, noctalia, greetd, tuigreet, alacritty, brightnessctl, playerctl, inotify-tools, wl-clipboard, pavucontrol, cava, seahorse, xterm, zsh, bat, micro, geany, ripgrep, stow, overpass-fonts, xdg-desktop-portal-gnome, gnome-keyring, nautilus |
+| terra (enabled at build only) | ghostty, satty, yazi, starship |
+| brave (first-party rpm repo, enabled at build only) | brave-origin |
 | Vendored at build | Overpass Nerd Font (pinned Arch package `otf-overpass-nerd-3.4.0-2`, sha256-verified — not in Fedora/COPR/nerd-fonts release zips) |
 
 GNOME removal is done by `files/scripts/remove-gnome.sh`: an explicit list

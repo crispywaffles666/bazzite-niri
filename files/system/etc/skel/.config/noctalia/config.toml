@@ -152,7 +152,7 @@ show_instance_count  = false
 launcher_position    = "end"
 active_monitor_only  = true
 monitors             = []
-pinned               = ["brave-origin-beta", "com.mitchellh.ghostty"]
+pinned               = ["brave-origin", "com.mitchellh.ghostty"]
 
 # ── Notifications ──
 

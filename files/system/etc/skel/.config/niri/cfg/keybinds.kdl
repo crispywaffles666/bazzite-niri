@@ -10,7 +10,7 @@ binds {
     // ─── Applications ───
     Mod+Return                          hotkey-overlay-title="Open Terminal: Alacritty" { spawn "alacritty"; }
     Alt+Space hotkey-overlay-title="Open App Launcher" { toggle-overview; }
-    Mod+B                               hotkey-overlay-title="Open Browser: firefox" { spawn "firefox"; }
+    Mod+B                               hotkey-overlay-title="Open Browser: Brave" { spawn "brave-origin"; }
     Mod+ALT+L                         allow-when-locked=true  hotkey-overlay-title="Lock Screen" { spawn "loginctl" "lock-session"; }
     Mod+Shift+Q                        hotkey-overlay-title="Power Menu" { spawn-sh "noctalia msg panel-toggle power-menu"; }
     Super+Space repeat=false { toggle-overview; }

@@ -39,7 +39,7 @@ modules:
         - fuzzel
 
   # terra ships disabled in bazzite; enable it just for the build
-  # (ghostty/awww/satty/yazi/starship live there, verified "Terra 44")
+  # (ghostty/satty/yazi/starship live there, verified "Terra 44")
   # brave's first-party rpm repo is added for brave-origin; both are
   # disabled again at the end of the build
   - type: script
@@ -47,18 +47,8 @@ modules:
       - dnf5 config-manager setopt terra.enabled=1
       - dnf5 config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
 
-  # breeze-icon-theme must land in its own transaction: installing it in the
-  # same rpm transaction as kf6-breeze-icons reproducibly fails cpio unpack
-  # ("symlink failed" on a breeze-dark icon). It is a hard dependency of
-  # qt6ct via kf6-kiconthemes -> kf6-breeze-icons -> breeze-icon-theme, so it
-  # cannot be excluded; installing it first sidesteps the rpm bug.
-  - type: dnf
-    install:
-      packages:
-        - breeze-icon-theme
-
   # Phase 2: desktop shell + user's desktop environment (CachyOS parity).
-  # ghostty/awww/satty/yazi/starship come from terra (enabled for the build
+  # ghostty/satty/yazi/starship come from terra (enabled for the build
   # bazzite); everything else is from the official Fedora repos.
   - type: dnf
     install:
@@ -66,13 +56,13 @@ modules:
         # shell + compositor companions
         - noctalia
         - ghostty
-        - awww
         - satty
-        - cliphist
         - brightnessctl
         - playerctl
         - inotify-tools
-        - slurp
+        # wl-copy is used by screenshot-notify.sh's Copy action and satty's
+        # copy-command; nothing else pulls it in, so make it explicit
+        - wl-clipboard
         - pavucontrol
         - cava
         # browser: brave origin standalone (minimal build, extras compiled
@@ -81,8 +71,6 @@ modules:
         # power-profiles-daemon deliberately absent: base ships tuned-ppd,
         # which conflicts with it and already serves the same PPD DBus API
         # desktop tools
-        - qt5ct
-        - qt6ct
         - seahorse
         - xterm
         # cli tools (neovim + LSPs deliberately excluded: installed via brew)
