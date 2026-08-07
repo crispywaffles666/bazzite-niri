@@ -4,7 +4,7 @@ This is my personal bazzite image which strips out most of GNOME and instead rep
 
 **A note if you're bringing your own niri config:**
 
-This image is built around noctalia shell. Noctalia provides most of the desktop stack (bar, launcher, notifications, lock screen, idle management). Because of that, alternatives such as waybar, fuzzel, swaylock, and swayidle are not included.
+This image is built around Noctalia shell. Noctalia provides most of the desktop stack (bar, launcher, notifications, lock screen, idle management). Because of that, alternatives such as `waybar`, `fuzzel`, `swaylock`, and `swayidle` are not included.
 
 If your existing config depends on a different set of shell components, expect to layer the packages you need or fork this image and add them to the build.
 
