@@ -70,6 +70,13 @@ Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { togg
 | ble.sh | `.bashrc` sources `~/.local/share/blesh/ble.sh` if present (optional bash line editor) | build from source into `~/.local/share/blesh` |
 | Graphite GTK / Colloid icons | gschema override (see *First boot* above) | [Graphite-gtk-theme-dracula](https://github.com/crispywaffles666/Graphite-gtk-theme-dracula) + [Colloid-icon-theme](https://github.com/vinceliuice/Colloid-icon-theme) |
 
+## Why use `bazzite-gnome` ?
+
+A few reasons:
+1. I was running `bazzite-gnome` before rebasing to this image
+2. I tend to gravitate more towards GNOME tooling than KDE (i.e. nautilus is my gui file manager of choice included in this image)
+3. This image replicates my CachyOS setup as closely as possible, which also made use of GNOME tooling such as the keyring and portals.
+
 ## About:
 
 This is a custom [bootc](https://bootc-dev.github.io/) image: **bazzite-gnome with GNOME
