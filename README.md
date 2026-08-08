@@ -104,6 +104,7 @@ A few reasons:
 1. I was running `bazzite-gnome` before rebasing to this image
 2. I tend to gravitate more towards GNOME tooling than KDE (i.e. nautilus is my gui file manager of choice included in this image)
 3. This image replicates my CachyOS setup as closely as possible, which also made use of GNOME tooling such as the keyring and portals.
+4. `gnome-keyring` does some heavy lifting here, supporting both our display manager and niri session. Doing the same with KDE tooling would require bringing in all of SDDM.
 
 ## About:
 
