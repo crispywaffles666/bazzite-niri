@@ -8,23 +8,19 @@ path_prepend() {
 }
 
 path_prepend "$HOME/bin"
-path_prepend "$HOME/.cargo/bin"
 path_prepend "$HOME/.local/bin"
-path_prepend "$HOME/.npm-global/bin"
 export PATH
 
 # env vars
-export EDITOR=nvim
-export MANPAGER="nvim +Man!"
-export ANDROID_HOME="$HOME/Android/Sdk"
+export EDITOR=micro
+export VISUAL=micro
+export MANPAGER="less -R"
 
 [[ $- != *i* ]] && return
 
 # Reset login shell hooks from /etc/profile.d/ that conflict with ble.sh
 PROMPT_COMMAND=()
 PS0=
-
-command -v pfetch >/dev/null && pfetch
 
 # completions
 [[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion
@@ -46,18 +42,11 @@ bind '"\e[1;5D": beginning-of-line'
 bind '"\e[1;5C": end-of-line'
 
 # aliases
-alias yay="paru"
 alias ls='ls --color=auto -A'
 alias grep='grep --color=auto'
 alias fastfetch='/usr/bin/fastfetch -c ~/.config/fastfetch/fastfetch.jsonc'
 alias neofetch='/usr/bin/fastfetch -c ~/.config/fastfetch/fastfetch.jsonc'
 alias cat="bat --theme=base16 --paging=never"
-
-ivpn-connect() {
-  ivpn connect -fastest -protocol WireGuard &&
-    sudo resolvectl dnsovertls wgivpn no &&
-    sudo resolvectl domain wgivpn '~.'
-}
 
 # prompt
 eval "$(starship init bash)"

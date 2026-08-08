@@ -1,11 +1,3 @@
-# priorities
-command -v pfetch >/dev/null && pfetch
-
-# antidote (only if installed via brew)
-[[ -r /home/linuxbrew/.linuxbrew/opt/antidote/share/antidote/antidote.zsh ]] && \
-  source /home/linuxbrew/.linuxbrew/opt/antidote/share/antidote/antidote.zsh && \
-  antidote load
-
 # completions
 autoload -Uz compinit && compinit
 
@@ -39,28 +31,18 @@ fi
 
 # PATH
 typeset -U path PATH
-path=($HOME/bin $HOME/.local/bin $HOME/.cargo/bin $HOME/.npm-global/bin $path)
+path=($HOME/bin $HOME/.local/bin $path)
 
 # env vars
-export EDITOR=nvim
-export MANPAGER="nvim +Man!"
-export ANDROID_HOME=$HOME/Android/Sdk
+export EDITOR=micro
+export VISUAL=micro
+export MANPAGER="less -R"
 
 # aliases
-alias yay="paru"
 alias ls="${aliases[ls]:-ls} --color=auto -A"
 # alias fastfetch='/usr/bin/fastfetch -c ~/.config/fastfetch/fastfetch.jsonc'
 # alias neofetch='/usr/bin/fastfetch -c ~/.config/fastfetch/fastfetch.jsonc'
 alias cat="bat --theme=base16 --paging=never"
 
-ivpn-connect() {
-  ivpn connect -fastest -protocol WireGuard &&
-    sudo resolvectl dnsovertls wgivpn no &&
-    sudo resolvectl domain wgivpn "~."
-}
-
 # prompt
 eval "$(starship init zsh)"
-
-# kimi-code
-export PATH="$HOME/.kimi-code/bin:$PATH"
