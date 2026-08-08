@@ -15,7 +15,8 @@ If your existing config depends on a different set of shell components, expect t
 - **Avoids COPR:** All packages are sourced from the official Fedora repos, terra, or brave's first-party rpm repo.
 - **Replicates a tuned Arch/CachyOS desktop:** My lived-in Niri/Noctalia CachyOS desktop was used as the reference for this image:
 <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/e14954d4-3e13-43b4-bfed-70ff6754043c" />
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/bb7e002a-31e3-47b4-9be7-4c18902cd7cb" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/95cda50b-95e4-49e7-8d94-266b3401d73a" />
+
 
 
 
