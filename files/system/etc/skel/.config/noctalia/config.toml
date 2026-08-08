@@ -1,9 +1,11 @@
-# Noctalia v5 — migrated from v4 settings.json
+# Noctalia v5 factory defaults
 
 # ── Shell ──
 
+[accessibility]
+ui_scale = 1.0
+
 [shell]
-ui_scale              = 1.2
 corner_radius_scale   = 1.0
 font_family           = "Overpass Nerd Font"
 polkit_agent          = true
@@ -60,19 +62,11 @@ capsule_fill       = "surface_variant"
 capsule_thickness  = 0.76
 capsule_radius     = 8.0
 capsule_opacity    = 1.0
-scale              = 1.2
+scale              = 1.0
 
 start  = ["workspaces", "active-window"]
 center = ["clock"]
 end    = ["cpu", "ram", "notifications", "tray", "volume", "control-center"]
-
-[bar.default.monitor.dp4]
-match = "DP-4"
-scale = 1.2
-
-[bar.default.monitor.dp3]
-match = "DP-3"
-scale = 1.0
 
 # ── Widgets ──
 
@@ -149,7 +143,7 @@ show_instance_count  = false
 launcher_position    = "end"
 active_monitor_only  = true
 monitors             = []
-pinned               = ["brave-origin", "com.mitchellh.ghostty"]
+pinned               = []
 
 # ── Notifications ──
 
@@ -185,6 +179,13 @@ directory           = "~/Pictures/Wallpapers"
 enabled          = false
 interval_seconds = 300
 order            = "random"
+
+# ── Brightness ──
+
+[brightness]
+# Discover external monitors that support DDC/CI. Noctalia still prefers a
+# kernel backlight automatically on laptops.
+enable_ddcutil = true
 
 # ── Idle ──
 

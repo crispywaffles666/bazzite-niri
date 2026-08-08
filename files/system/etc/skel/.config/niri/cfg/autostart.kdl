@@ -3,5 +3,4 @@
 
     spawn-at-startup "noctalia"
     spawn-at-startup "sh" "-c" "$HOME/.local/bin/niri-overview-autoclose.sh"
-    spawn-at-startup "sh" "-c" "$HOME/.local/bin/auto-fullwidth-dp3.sh"
     spawn-at-startup "sh" "-c" "$HOME/.local/bin/screenshot-notify.sh"

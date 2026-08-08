@@ -28,8 +28,8 @@ binds {
     XF86AudioPause                      allow-when-locked=true { spawn "playerctl" "play-pause"; }
 
     // ─── Brightness Controls ───
-    XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "brightnessctl set 5%+"; }
-    XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "brightnessctl set 5%-"; }
+    XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "noctalia msg raise-brightness"; }
+    XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "noctalia msg lower-brightness"; }
 
     // ─── Window Movement and Focus ───
     Mod+Q                               { close-window; }
