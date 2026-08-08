@@ -1,3 +1,11 @@
+# priorities
+command -v pfetch >/dev/null && pfetch
+
+# antidote (only if installed via brew)
+[[ -r /home/linuxbrew/.linuxbrew/opt/antidote/share/antidote/antidote.zsh ]] && \
+  source /home/linuxbrew/.linuxbrew/opt/antidote/share/antidote/antidote.zsh && \
+  antidote load
+
 # completions
 autoload -Uz compinit && compinit
 

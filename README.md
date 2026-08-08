@@ -119,7 +119,7 @@ cosign, published to GHCR by GitHub Actions.
 - Shell: `noctalia` v5 (official Fedora repos)
 - Display manager: `greetd` + `tuigreet` (GDM removed; both from the official Fedora repos)
 - Kept from GNOME: `xdg-desktop-portal-gnome` (niri has no portal backend),
-  `gnome-keyring` (secret service / SSH agent) `nautilus` (file manager)
+  `gnome-keyring` (Secret Service / portal provider), `nautilus` (file manager)
 
 ## Package sources
 

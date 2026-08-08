@@ -126,3 +126,9 @@ modules:
     snippets:
       - dnf5 config-manager setopt terra.enabled=0
       - dnf5 config-manager setopt brave-browser.enabled=0
+
+  # Guard against Fedora/Bazzite dependency changes silently restoring the
+  # GNOME desktop or removing packages required by the Niri session.
+  - type: script
+    scripts:
+      - validate-package-set.sh

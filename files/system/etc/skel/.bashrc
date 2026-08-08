@@ -22,6 +22,8 @@ export MANPAGER="less -R"
 PROMPT_COMMAND=()
 PS0=
 
+command -v pfetch >/dev/null && pfetch
+
 # completions
 [[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion
 

@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # Remove the GNOME desktop stack from bazzite-gnome while keeping:
 #   - xdg-desktop-portal-gnome (niri has no portal backend of its own)
-#   - gnome-keyring            (secret service / SSH agent)
+#   - gnome-keyring            (Secret Service / portal provider)
 #   - nautilus                 (user's GUI file manager)
 #   - gtk4/libadwaita/gvfs     (needed by ghostty, noctalia, nautilus deps)
 # Package names are filtered through rpm -q first, so the script stays
