@@ -14,6 +14,7 @@ avatar_path           = "~/.face"
 password_style        = "default"
 clipboard_enabled     = true
 app_icon_colorize     = false
+niri_overview_type_to_launch_enabled = true
 
 [shell.screenshot]
 save_to_file      = false
@@ -31,9 +32,24 @@ alpha     = 0.55
 transparency_mode          = "soft"
 borders                    = true
 shadow                     = true
-launcher_placement         = "centered"
+launcher_placement         = "floating"
+launcher_position          = "center"
 control_center_placement   = "attached"
 session_placement          = "attached"
+open_near_click_control_center = true
+
+# ── Theme ──
+
+[theme]
+source           = "builtin"
+builtin          = "Dracula"
+mode             = "dark"
+wallpaper_scheme = "m3-content"
+
+[backdrop]
+enabled        = true
+blur_intensity = 0.0
+tint_intensity = 0.0
 
 # ── Bar ──
 
@@ -64,28 +80,22 @@ capsule_radius     = 8.0
 capsule_opacity    = 1.0
 scale              = 1.0
 
-start  = ["workspaces", "active-window"]
+start  = ["workspaces"]
 center = ["clock"]
 end    = ["cpu", "ram", "notifications", "tray", "volume", "control-center"]
 
 # ── Widgets ──
 
 [widget.workspaces]
-display                    = "id"
+label_source               = "id"
 max_label_chars            = 2
-pill_scale                 = 0.6
+pill_scale                 = 0.8
+active_pill_size           = 1.0
 focused_color              = "primary"
 occupied_color             = "secondary"
 empty_color                = "secondary"
 labels_only_when_occupied  = true
 hide_when_empty            = false
-
-[widget.active-window]
-type          = "active_window"
-display       = "icon_only"
-max_length    = 145
-icon_size     = 14
-title_scroll  = "on_hover"
 
 [widget.clock]
 format         = "{:%a %b %d - %I:%M %p}"
@@ -94,15 +104,17 @@ tooltip_format = "{:%H:%M %a, %b %d}"
 [widget.cpu]
 type            = "sysmon"
 stat            = "cpu_usage"
-display         = "text"
-show_label      = true
+visualization   = "none"
+show_value      = true
+show_glyph      = true
 highlight_color = "error"
 
 [widget.ram]
 type            = "sysmon"
 stat            = "ram_used"
-display         = "text"
-show_label      = true
+visualization   = "none"
+show_value      = true
+show_glyph      = true
 highlight_color = "error"
 
 [widget.notifications]
@@ -116,8 +128,11 @@ hidden  = []
 
 [widget.volume]
 device      = "output"
-scroll_step = 5
 show_label  = false
+
+[widget.volume.actions]
+scroll_up   = "volume-up 5"
+scroll_down = "volume-down 5"
 
 [widget.control-center]
 glyph = "noctalia"
@@ -125,7 +140,7 @@ glyph = "noctalia"
 # ── Dock ──
 
 [dock]
-enabled              = true
+enabled              = false
 position             = "bottom"
 auto_hide            = true
 reserve_space        = false
@@ -143,20 +158,15 @@ show_instance_count  = false
 launcher_position    = "end"
 active_monitor_only  = true
 monitors             = []
-pinned               = []
+pinned               = ["com.mitchellh.ghostty", "com.brave.Browser"]
 
 # ── Notifications ──
 
-[notifications]
+[notification]
 position             = "top_right"
 background_opacity   = 1.0
 layer                = "overlay"
 monitors             = []
-
-[notifications.duration]
-low      = 3000
-normal   = 8000
-critical = 15000
 
 [notification.filter.niri-screenshot]
 match         = "niri"
@@ -167,13 +177,13 @@ save_history  = false
 # ── Wallpaper ──
 
 [wallpaper]
-enabled             = false
+enabled             = true
 fill_mode           = "crop"
 fill_color          = "#000000"
 transition          = ["honeycomb"]
 transition_duration = 1500
 edge_smoothness     = 0.05
-directory           = "~/Pictures/Wallpapers"
+directory           = "~/Pictures/"
 
 [wallpaper.automation]
 enabled          = false
@@ -186,26 +196,29 @@ order            = "random"
 # Discover external monitors that support DDC/CI. Noctalia still prefers a
 # kernel backlight automatically on laptops.
 enable_ddcutil = true
+# One brightness level for all monitors instead of per-monitor sliders.
+sync_all_monitors = true
 
 # ── Idle ──
 
 [idle]
 pre_action_fade_seconds = 2.0
+behavior_order          = ["lock", "screen-off", "suspend"]
 
 [idle.behavior.screen-off]
-timeout = 600
+timeout = 1200
 action  = "screen_off"
 enabled = true
 
 [idle.behavior.lock]
-timeout = 660
+timeout = 1260
 action  = "lock"
 enabled = true
 
 [idle.behavior.suspend]
-timeout            = 1800
-action             = "lock_and_suspend"
-enabled            = true
+timeout             = 3600
+action              = "lock_and_suspend"
+enabled             = true
 lock_before_suspend = true
 
 # ── Lock Screen ──
@@ -279,3 +292,11 @@ action            = "shutdown"
 enabled           = true
 shortcut          = "6"
 countdown_seconds = 10
+
+# ── Misc ──
+
+[location]
+auto_locate = true
+
+[weather]
+unit = "imperial"
