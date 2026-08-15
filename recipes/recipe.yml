@@ -3,7 +3,7 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 name: bazzite-niri
-description: Bazzite with GNOME stripped, niri compositor + noctalia shell (CachyOS parity)
+description: Bazzite with GNOME stripped, niri compositor + noctalia shell
 
 base-image: ghcr.io/ublue-os/bazzite-gnome
 image-version: stable
@@ -67,12 +67,9 @@ modules:
         - cava
         # browser: brave-origin from brave's first-party rpm repo
         - brave-origin
-        # power-profiles-daemon deliberately absent: base ships tuned-ppd,
-        # which conflicts with it and already serves the same PPD DBus API
-        # desktop tools
         - seahorse
         - xterm
-        # cli tools (neovim + LSPs deliberately excluded: installed via brew)
+        # cli tools
         - zsh
         - bat
         - micro
@@ -101,8 +98,7 @@ modules:
       - setup-greetd.sh
       - install-overpass-nerd.sh
 
-  # Phase 3: plain Overpass (monospace-font-name 'Overpass Mono' in the
-  # gschema override refers to the unpatched family)
+  # Phase 3: install Overpass
   - type: dnf
     install:
       packages:
