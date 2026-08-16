@@ -23,4 +23,18 @@ if ! wl-paste --list-types 2>/dev/null | grep -q '^text/plain'; then
 fi
 
 sleep 0.15 # let niri settle focus back on the previous window
-wtype -- "$after"
+
+# Chromium-family apps ignore the remapped unicode keysyms wtype types via
+# the virtual-keyboard protocol (Geany/GTK/terminals accept them fine), so
+# paste from the clipboard there instead of typing. Ctrl+V is literal-next
+# in terminals, which is why this isn't the default path.
+app_id="$(niri msg --json focused-window 2>/dev/null | sed -n 's/.*"app_id": *"\([^"]*\)".*/\1/p')"
+shopt -s nocasematch
+case "$app_id" in
+    *brave*|*chrom*|*edge*|*vivaldi*|*opera*)
+        wtype -M ctrl v -m ctrl
+        ;;
+    *)
+        wtype -- "$after"
+        ;;
+esac
