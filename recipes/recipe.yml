@@ -90,9 +90,10 @@ modules:
   # wrapper (~/.local/bin) that types the pick into the focused window via
   # wtype, replacing Smile's GNOME-only auto-paste extension.
   - type: default-flatpaks
-    user:
-      install:
-        - it.mijorus.smile
+    configurations:
+      - scope: user
+        install:
+          - it.mijorus.smile
 
   # localsearch (GNOME/tracker indexer) is a hard Requires of nautilus, so it
   # must stay in the image — but its extractor segfaults in a loop on this
