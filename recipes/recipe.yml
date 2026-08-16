@@ -63,6 +63,10 @@ modules:
         # wl-copy is used by screenshot-notify.sh's Copy action and satty's
         # copy-command; nothing else pulls it in, so make it explicit
         - wl-clipboard
+        # wtype (virtual-keyboard) is what smile-paste.sh uses to type the
+        # picked emoji into the focused window; replaces Smile's GNOME-only
+        # auto-paste extension. Fedora repos.
+        - wtype
         - pavucontrol
         - cava
         # browser: brave-origin from brave's first-party rpm repo
@@ -78,6 +82,17 @@ modules:
         - stow
         - yazi
         - starship
+
+  # Smile (emoji picker) is flatpak-only upstream — not in the Fedora repos,
+  # so dnf can't ship it. default-flatpaks installs it as a user flatpak from
+  # flathub on each new user's first login. skel carries the matching pieces:
+  # Mod+Period keybind + floating window-rule (niri cfg) and the smile-paste.sh
+  # wrapper (~/.local/bin) that types the pick into the focused window via
+  # wtype, replacing Smile's GNOME-only auto-paste extension.
+  - type: default-flatpaks
+    user:
+      install:
+        - it.mijorus.smile
 
   # localsearch (GNOME/tracker indexer) is a hard Requires of nautilus, so it
   # must stay in the image — but its extractor segfaults in a loop on this
