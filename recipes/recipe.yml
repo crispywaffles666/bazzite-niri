@@ -92,6 +92,9 @@ modules:
   - type: default-flatpaks
     configurations:
       - scope: user
+        # otherwise the module's boot-time service notifies on EVERY boot
+        # ("installing flatpaks" + done), even when there's nothing to do
+        notify: false
         install:
           - it.mijorus.smile
 
