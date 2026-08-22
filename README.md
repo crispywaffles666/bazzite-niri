@@ -86,9 +86,9 @@ My keybinds to get you started:
 | `Print` | Screenshot |
 | `Ctrl+Alt+Delete` | Quit niri |
 
-**To get the launcher working:**
-Go to noctalia settings > niri > enable `Type to Launch`.
-Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { toggle-overview; }` to `Super+Space repeat=false { spawn-sh "noctalia msg panel-toggle launcher"; }`.
+**Launcher:**
+- `Alt+Space` then type while the overview is showing
+- Or in `~/.config/niri/cfg/keybinds.kdl`, change `Super+Space repeat=false { toggle-overview; }` to `Super+Space repeat=false { spawn-sh "noctalia msg panel-toggle launcher"; }`.
 
 **A few things you might want to install depending on how much you're copying my configs:** 
 
