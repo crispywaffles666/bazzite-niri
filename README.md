@@ -97,7 +97,7 @@ My keybinds to get you started:
 | `pfetch` | runs at every interactive bash/zsh startup (`.bashrc`, `.zshrc`) | `brew install pfetch-rs` (or `cargo install pfetch`) |
 | `antidote` | `.zshrc` sources it for zsh plugins if present | `brew install antidote` |
 | ble.sh | `.bashrc` sources `~/.local/share/blesh/ble.sh` if present (optional bash line editor) | build from source into `~/.local/share/blesh` |
-| Graphite GTK / Colloid icons | gschema override sets `Graphite-purple-Dark-dracula` / `Colloid-Dracula-Dark` | [Graphite-gtk-theme](https://github.com/vinceliuice/Graphite-gtk-theme) (Dracula colorscheme is upstream now; install the purple dark Dracula variant) + [Colloid-icon-theme](https://github.com/vinceliuice/Colloid-icon-theme) |
+| Graphite GTK / Colloid icons | gschema override sets `Graphite-purple-Dark-dracula` / `Colloid-Dracula-Dark` | [Graphite-gtk-theme](https://github.com/vinceliuice/Graphite-gtk-theme) + [Colloid-icon-theme](https://github.com/vinceliuice/Colloid-icon-theme) |
 
 ## Why use `bazzite-gnome` ?
 
