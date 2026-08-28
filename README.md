@@ -2,12 +2,6 @@
 
 This is my personal bazzite image which strips out most of GNOME and instead replaces it with niri and the required tooling and services for my dots.
 
-**A note if you're bringing your own niri config:**
-
-This image is built around Noctalia shell. Noctalia provides most of the desktop stack (bar, launcher, notifications, lock screen, idle management). Because of that, alternatives such as `waybar`, `fuzzel`, `swaylock`, and `swayidle` are not included.
-
-If your existing config depends on a different set of shell components, expect to layer the packages you need or fork this image and add them to the build.
-
 ## Standout features of this image:
 - **All of bazzite, minus GNOME:** keeps the kernel, gaming stack, codecs, and hardware support that from-scratch niri images make you reassemble yourself.
 - **Actually strips the base DE:** many similar images based on bazzite simply layer the compositor on top of the unused DE session. GNOME is completely removed from this image aside from a couple packages that support the niri environment (nautilus, keyring, portals).
@@ -51,6 +45,12 @@ If you rebase to this image without planning ahead. You may find yourself stuck 
    app configs).
 
 </details>
+
+**A note if you're bringing your own niri config:**
+
+This image is built around Noctalia shell. Noctalia provides most of the desktop stack (bar, launcher, notifications, lock screen, idle management). Because of that, alternatives such as `waybar`, `fuzzel`, `swaylock`, and `swayidle` are not included.
+
+If your existing config depends on a different set of shell components, expect to layer the packages you need or fork this image and add them to the build.
 
 ## Copying my configs:
 Whether you want them just to get a working environment, or to build off of; the bare minimum niri config, the noctalia shell config, and helper scripts can be copied by:
