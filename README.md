@@ -46,11 +46,13 @@ If you rebase to this image without planning ahead. You may find yourself stuck 
 
 </details>
 
-**A note if you're bringing your own niri config:**
+<details>
+<summary><strong>A note if you're bringing your own niri config:</strong></summary>
 
 This image is built around Noctalia shell. Noctalia provides most of the desktop stack (bar, launcher, notifications, lock screen, idle management). Because of that, alternatives such as `waybar`, `fuzzel`, `swaylock`, and `swayidle` are not included.
 
 If your existing config depends on a different set of shell components, expect to layer the packages you need or fork this image and add them to the build.
+</details>
 
 ## Copying my configs:
 Whether you want them just to get a working environment, or to build off of; the bare minimum niri config, the noctalia shell config, and helper scripts can be copied by:
