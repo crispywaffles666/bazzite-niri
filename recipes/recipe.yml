@@ -10,11 +10,17 @@ image-version: stable
 
 modules:
   # ship everything under files/system: greetd config, /etc/skel dotfiles,
-  # tmpfiles drop, gschema override
+  # tmpfiles drop, gschema override. Also bake the custom desktop theming
+  # (Graphite-purple-Dark-dracula GTK theme + dracula-icons-main icon theme)
+  # into /usr/share so it is image-owned and available to every user.
   - type: files
     files:
       - source: system
         destination: /
+      - source: themes
+        destination: /usr/share/themes
+      - source: icons
+        destination: /usr/share/icons
 
   # Phase 1: niri compositor + login manager.
   # xdg-desktop-portal-gnome and gnome-keyring are listed here so dnf marks
@@ -67,6 +73,8 @@ modules:
         # picked emoji into the focused window; replaces Smile's GNOME-only
         # auto-paste extension. Fedora repos.
         - wtype
+        # gtk-update-icon-cache: rebuilds the baked-in icon theme index
+        - gtk-update-icon-cache
         - pavucontrol
         - cava
         # browser: brave-origin from brave's first-party rpm repo
@@ -82,6 +90,14 @@ modules:
         - stow
         - yazi
         - starship
+
+  # Rebuild the baked-in icon theme's index so GTK does not rescan ~40k files
+  # on first use. Runs after the dnf modules above so gtk-update-icon-cache is
+  # already installed; placing it before the GNOME removal guarantees the
+  # cache exists even if that pass drops the tool.
+  - type: script
+    snippets:
+      - gtk-update-icon-cache /usr/share/icons/dracula-icons-main
 
   # Smile (emoji picker) is flatpak-only upstream — not in the Fedora repos,
   # so dnf can't ship it. default-flatpaks installs it as a user flatpak from

@@ -1,9 +1,10 @@
-# Theming defaults, matching the CachyOS reference setup.
-# gtk-theme/icon-theme take effect once the user installs the Graphite /
-# Colloid themes manually (see README); missing themes fall back to default.
+# Theming defaults, matching the CachyOS-connected reference setup.
+# gtk-theme/icon-theme reference the themes baked into the image at /usr/share
+# (Graphite-purple-Dark-dracula GTK theme + dracula-icons-main icon theme), so
+# they take effect out of the box with no manual install.
 [org.gnome.desktop.interface]
 color-scheme='prefer-dark'
 gtk-theme='Graphite-purple-Dark-dracula'
-icon-theme='Colloid-Dracula-Dark'
+icon-theme='dracula-icons-main'
 font-name='Overpass Nerd Font 12'
 monospace-font-name='Overpass Mono 10'
