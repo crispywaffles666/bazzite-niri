@@ -6,15 +6,57 @@ description: Bazzite with GNOME stripped, niri compositor + noctalia shell
 base-image: ghcr.io/ublue-os/bazzite-gnome
 image-version: stable
 
+stages:
+  - name: theme-builder
+    from: registry.fedoraproject.org/fedora:44
+    modules:
+      - type: dnf
+        install:
+          install-weak-deps: false
+          packages:
+            - bash
+            - coreutils
+            - curl
+            - gzip
+            - sassc
+            - sed
+            - tar
+            - gtk-update-icon-cache
+
+      - type: script
+        scripts:
+          - install-themes.sh
+
 modules:
   - type: files
     files:
       - source: system
         destination: /
-      - source: themes
-        destination: /usr/share/themes
-      - source: icons
-        destination: /usr/share/icons
+
+  # Copy only generated artifacts out of the disposable build stage.
+  - type: script
+    snippets:
+      - rm -rf /usr/share/themes/Graphite-purple-Dark-dracula /usr/share/icons/dracula-icons-main
+
+  - type: copy
+    from: theme-builder
+    src: /usr/share/themes/Graphite-purple-Dark-dracula
+    dest: /usr/share/themes/Graphite-purple-Dark-dracula
+
+  - type: copy
+    from: theme-builder
+    src: /usr/share/icons/dracula-icons-main
+    dest: /usr/share/icons/dracula-icons-main
+
+  - type: copy
+    from: theme-builder
+    src: /usr/share/licenses/Graphite-gtk-theme
+    dest: /usr/share/licenses/Graphite-gtk-theme
+
+  - type: copy
+    from: theme-builder
+    src: /usr/share/licenses/dracula-icons
+    dest: /usr/share/licenses/dracula-icons
 
   # Mark the portal and keyring as user-picked so autoremove keeps them.
   - type: dnf
@@ -55,7 +97,6 @@ modules:
         # Smile's GNOME-only add-on cannot paste under Niri, so the wrapper
         # uses wtype.
         - wtype
-        - gtk-update-icon-cache
         - pavucontrol
         - cava
         - brave-origin
@@ -69,11 +110,6 @@ modules:
         - stow
         - yazi
         - starship
-
-  # Cache the 40,000 icons before GNOME cleanup can drop the cache tool.
-  - type: script
-    snippets:
-      - gtk-update-icon-cache /usr/share/icons/dracula-icons-main
 
   # Smile ships only on Flathub, so install it for each new user.
   - type: default-flatpaks

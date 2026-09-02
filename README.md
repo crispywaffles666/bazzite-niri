@@ -99,7 +99,7 @@ My keybinds to get you started:
 | `pfetch` | runs at every interactive bash/zsh startup (`.bashrc`, `.zshrc`) | `brew install pfetch-rs` (or `cargo install pfetch`) |
 | `antidote` | `.zshrc` sources it for zsh plugins if present | `brew install antidote` |
 | ble.sh | `.bashrc` sources `~/.local/share/blesh/ble.sh` if present (optional bash line editor) | build from source into `~/.local/share/blesh` |
-| Graphite GTK / Dracula icons | baked into the image (`Graphite-purple-Dark-dracula` / `dracula-icons-main`), set by gschema override + `/etc/skel` | nothing to install |
+| Graphite GTK / Dracula icons | generated/downloaded from pinned, checksum-verified upstream source during image construction (`Graphite-purple-Dark-dracula` / `dracula-icons-main`), set by gschema override + `/etc/skel` | nothing to install |
 
 ## Why use `bazzite-gnome` ?
 
@@ -131,6 +131,13 @@ cosign, published to GHCR by GitHub Actions.
 | terra (enabled at build only) | ghostty, satty, yazi, starship |
 | brave (first-party rpm repo, enabled at build only) | brave-origin |
 | Vendored at build | Overpass Nerd Font (pinned Arch package `otf-overpass-nerd-3.4.0-2`, sha256-verified — not in Fedora/COPR/nerd-fonts release zips) |
+
+The Graphite GTK theme is generated with `sassc` from the pinned upstream
+Dracula-support merge commit, and the unmodified upstream Dracula icon theme
+is downloaded from its pinned commit. Both commit archives are SHA-256
+verified by `files/scripts/install-themes.sh`. A disposable build stage keeps
+the source trees and theme build dependencies out of the final image while
+retaining upstream licensing notices.
 
 GNOME removal is done by `files/scripts/remove-gnome.sh`: an explicit list
 filtered through `rpm -q`, `clean_requirements_on_remove=false` (dnf5's remove
@@ -169,5 +176,5 @@ bluebuild build recipes/recipe.yml
 - `recipes/recipe.yml` — the BlueBuild recipe
 - `files/system/` — copied verbatim to `/` (greetd config, gschema override,
   `/etc/skel` dotfiles seed)
-- `files/scripts/` — build scripts (GNOME removal, greetd setup, font fetch)
+- `files/scripts/` — build scripts (GNOME removal, greetd setup, pinned theme/font fetches)
 - `.github/workflows/build.yml` — CI (blue-build reusable action, cosign)
