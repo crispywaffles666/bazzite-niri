@@ -10,7 +10,6 @@ cursor-style = block
 window-save-state = never
 clipboard-trim-trailing-spaces = true
 confirm-close-surface = false
-#adjust-cell-width = 5%
 shell-integration-features = no-cursor
 shell-integration = none
 adjust-cell-height = 2%

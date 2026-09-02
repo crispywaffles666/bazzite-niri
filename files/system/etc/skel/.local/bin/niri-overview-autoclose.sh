@@ -1,23 +1,22 @@
 #!/bin/sh
-# Close the niri overview when a new window opens.
-
-known_ids=$(niri msg windows 2>/dev/null | grep -oP 'id: \K[0-9]+' | tr '\n' ' ')
+# The event stream reports both new and changed windows, so track known IDs.
+open_ids=$(niri msg windows 2>/dev/null | grep -oP 'id: \K[0-9]+' | tr '\n' ' ')
 
 niri msg event-stream | while read -r line; do
     case "$line" in
         "Window opened or changed:"*)
-            id=$(echo "$line" | grep -oP 'id: \K[0-9]+' | head -1)
-            case " $known_ids " in
-                *" $id "*)  ;;
+            window_id=$(echo "$line" | grep -oP 'id: \K[0-9]+' | head -1)
+            case " $open_ids " in
+                *" $window_id "*)  ;;
                 *)
-                    known_ids="$known_ids $id "
+                    open_ids="$open_ids $window_id "
                     niri msg action close-overview 2>/dev/null
                     ;;
             esac
             ;;
         "Window closed:"*)
-            id=$(echo "$line" | grep -oP 'id: \K[0-9]+' | head -1)
-            known_ids=$(echo "$known_ids" | sed "s/ $id / /g")
+            window_id=$(echo "$line" | grep -oP 'id: \K[0-9]+' | head -1)
+            open_ids=$(echo "$open_ids" | sed "s/ $window_id / /g")
             ;;
     esac
 done

@@ -1,6 +1,5 @@
-# cosign private key - never commit this
+# Never commit the signing key.
 cosign.key
-# bluebuild local artifacts
 .bluebuild-scripts_*
 Containerfile.*
 build/

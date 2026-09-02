@@ -1,5 +1,3 @@
-# Custom image: bazzite-gnome with GNOME stripped, niri + noctalia desktop
-# environment layered in.
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 name: bazzite-niri
@@ -9,10 +7,6 @@ base-image: ghcr.io/ublue-os/bazzite-gnome
 image-version: stable
 
 modules:
-  # ship everything under files/system: greetd config, /etc/skel dotfiles,
-  # tmpfiles drop, gschema override. Also bake the custom desktop theming
-  # (Graphite-purple-Dark-dracula GTK theme + dracula-icons-main icon theme)
-  # into /usr/share so it is image-owned and available to every user.
   - type: files
     files:
       - source: system
@@ -22,9 +16,7 @@ modules:
       - source: icons
         destination: /usr/share/icons
 
-  # Phase 1: niri compositor + login manager.
-  # xdg-desktop-portal-gnome and gnome-keyring are listed here so dnf marks
-  # them user-installed and the GNOME autoremove pass keeps them.
+  # Mark the portal and keyring as user-picked so autoremove keeps them.
   - type: dnf
     install:
       packages:
@@ -35,53 +27,40 @@ modules:
         - alacritty
         - xdg-desktop-portal-gnome
         - gnome-keyring
-        # keeps nautilus marked user-installed; without this the GNOME
-        # removal cascade removes it as an orphan of nautilus-gsconnect
+        # Removing GNOME add-ons would also drop Nautilus.
         - nautilus
       exclude:
-        # niri Recommends these companions; unused here (noctalia provides
-        # bar/launcher/lock screen) and would be dead weight in the image
+        # Noctalia replaces Niri's suggested bar, launcher, and lock screen.
         - swaylock
         - waybar
         - fuzzel
 
-  # terra ships disabled in bazzite; enable it just for the build
-  # (ghostty/satty/yazi/starship live there). brave's first-party rpm repo
-  # provides brave-origin. Both are re-disabled at the end.
+  # Terra ships disabled; turn it on only long enough to install its tools.
   - type: script
     snippets:
       - dnf5 config-manager setopt terra.enabled=1
       - dnf5 config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
 
-  # Phase 2: desktop shell + desktop environment.
-  # ghostty/satty/yazi/starship come from terra; everything else is from the
-  # official Fedora repos.
   - type: dnf
     install:
       packages:
-        # shell + compositor companions
         - noctalia
         - ghostty
         - satty
         - brightnessctl
         - playerctl
         - inotify-tools
-        # wl-copy is used by screenshot-notify.sh's Copy action and satty's
-        # copy-command; nothing else pulls it in, so make it explicit
+        # The screenshot tools call wl-copy, but no package pulls it in.
         - wl-clipboard
-        # wtype (virtual-keyboard) is what smile-paste.sh uses to type the
-        # picked emoji into the focused window; replaces Smile's GNOME-only
-        # auto-paste extension. Fedora repos.
+        # Smile's GNOME-only add-on cannot paste under Niri, so the wrapper
+        # uses wtype.
         - wtype
-        # gtk-update-icon-cache: rebuilds the baked-in icon theme index
         - gtk-update-icon-cache
         - pavucontrol
         - cava
-        # browser: brave-origin from brave's first-party rpm repo
         - brave-origin
         - seahorse
         - xterm
-        # cli tools
         - zsh
         - bat
         - micro
@@ -91,75 +70,52 @@ modules:
         - yazi
         - starship
 
-  # Rebuild the baked-in icon theme's index so GTK does not rescan ~40k files
-  # on first use. Runs after the dnf modules above so gtk-update-icon-cache is
-  # already installed; placing it before the GNOME removal guarantees the
-  # cache exists even if that pass drops the tool.
+  # Cache the 40,000 icons before GNOME cleanup can drop the cache tool.
   - type: script
     snippets:
       - gtk-update-icon-cache /usr/share/icons/dracula-icons-main
 
-  # Smile (emoji picker) is flatpak-only upstream — not in the Fedora repos,
-  # so dnf can't ship it. default-flatpaks installs it as a user flatpak from
-  # flathub on each new user's first login. skel carries the matching pieces:
-  # Mod+Period keybind + floating window-rule (niri cfg) and the smile-paste.sh
-  # wrapper (~/.local/bin) that types the pick into the focused window via
-  # wtype, replacing Smile's GNOME-only auto-paste extension.
+  # Smile ships only on Flathub, so install it for each new user.
   - type: default-flatpaks
     configurations:
       - scope: user
-        # otherwise the module's boot-time service notifies on EVERY boot
-        # ("installing flatpaks" + done), even when there's nothing to do
+        # The boot service sends two notices even when it has no work.
         notify: false
         install:
           - it.mijorus.smile
 
-  # localsearch (GNOME/tracker indexer) is a hard Requires of nautilus, so it
-  # must stay in the image — but its extractor segfaults in a loop on this
-  # GNOME-less setup. Mask its user units globally so no session starts the
-  # miner pipeline; nautilus falls back to plain filename search. The glob
-  # (not fixed unit names) keeps the masks working when a tinysparql ABI bump
-  # renames the units (localsearch-3.service -> localsearch-4.service);
-  # systemctl mask can't glob, so create the /dev/null symlinks directly.
+  # Nautilus needs localsearch, but its extractor crashes without GNOME.
+  # Unit names change with tinysparql releases. Since systemctl cannot use a
+  # glob, link every matching unit to /dev/null and keep plain filename search.
   - type: script
     snippets:
       - for u in /usr/lib/systemd/user/localsearch*.service; do ln -sf /dev/null "/etc/systemd/user/$(basename "$u")"; done
 
-  # strip the GNOME desktop (keeps xdg-desktop-portal-gnome + gnome-keyring),
-  # enable greetd as the display manager, install Overpass Nerd Font
   - type: script
     scripts:
       - remove-gnome.sh
       - setup-greetd.sh
       - install-overpass-nerd.sh
 
-  # Phase 3: install Overpass
   - type: dnf
     install:
       packages:
         - overpass-fonts
 
-  # delete GNOME-era gschema overrides shipped by fedora/bazzite — they break
-  # --strict compilation: org.gnome.shell / mutter / login-screen reference
-  # schemas removed with GNOME, the screensaver override sets picture-uri*
-  # keys GNOME 48 dropped, and bazzite's zz0-* files mix valid keys with
-  # gnome-software/mutter/shell keys. Then compile with --strict so the build
-  # fails on any bad key in the remaining overrides (fedora background +
-  # zz_bazzite-niri).
+  # These overrides name schemas or keys that GNOME cleanup removes. Drop them
+  # before the strict check so any bad key left in this image fails the build.
   - type: script
     snippets:
       - rm -f /usr/share/glib-2.0/schemas/00_org.gnome.shell.gschema.override /usr/share/glib-2.0/schemas/org.gnome.shell.gschema.override /usr/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override /usr/share/glib-2.0/schemas/10_org.gnome.desktop.screensaver.fedora.gschema.override /usr/share/glib-2.0/schemas/org.gnome.Ptyxis.fedora.gschema.override /usr/share/glib-2.0/schemas/zz0-0*.gschema.override
       - glib-compile-schemas --strict /usr/share/glib-2.0/schemas
 
-  # restore bazzite's default: terra disabled in the shipped image;
-  # brave's repo too (package updates flow through image rebuilds)
+  # Disable both repos in the shipped image; rebuilds supply package updates.
   - type: script
     snippets:
       - dnf5 config-manager setopt terra.enabled=0
       - dnf5 config-manager setopt brave-browser.enabled=0
 
-  # Guard against Fedora/Bazzite dependency changes silently restoring the
-  # GNOME desktop or removing packages required by the Niri session.
+  # Fail if upstream package changes restore GNOME or break Niri.
   - type: script
     scripts:
       - validate-package-set.sh

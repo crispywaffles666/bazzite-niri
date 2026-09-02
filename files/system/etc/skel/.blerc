@@ -1,7 +1,7 @@
-# Inline autosuggestion from history only (no fuzzy filename suggestions)
+# Avoid noisy filename guesses in inline hints.
 bleopt complete_auto_complete_opts=syntax-disabled
 
-# Tab: accept inline autosuggestion, or show menu then cycle through it
+# Tab accepts an inline hint or moves through the open menu.
 ble-bind -m auto_complete -f TAB auto_complete/insert
 ble-bind -m auto_complete -f C-i auto_complete/insert
 function ble/widget/complete-or-cycle {
@@ -13,8 +13,6 @@ function ble/widget/complete-or-cycle {
 }
 ble-bind -m emacs -f TAB complete-or-cycle
 ble-bind -m emacs -f C-i complete-or-cycle
-
-# Match zsh-syntax-highlighting colors
 
 ble-face -s syntax_command fg=green
 ble-face -s command_builtin fg=green
@@ -35,16 +33,11 @@ ble-face -s syntax_quotation fg=yellow
 ble-face -s syntax_param_expansion fg=cyan
 ble-face -s auto_complete fg=gray
 
-# tab completion highlight
 ble-face -s region_insert fg=black,bg=white
-# disable elapsed time display after commands
 bleopt exec_elapsed_enabled=
-# disable EOF marker after output without a trailing newline
 bleopt prompt_eol_mark=''
-# disable error mark on non-zero exit
 bleopt exec_errexit_mark=
-# silent autocd — execute cd directly and show a new prompt
-# (bash's shopt autocd always prints "cd -- <path>" which can't be suppressed)
+# Bash's autocd prints its cd command, so handle paths here to keep it quiet.
 function ble/widget/silent-autocd-accept {
   local trimmed="${_ble_edit_str}"
   trimmed="${trimmed#"${trimmed%%[![:space:]]*}"}"

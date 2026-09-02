@@ -1,9 +1,9 @@
     window-rule {
-        geometry-corner-radius 20 // Set every window radius to 20
+        geometry-corner-radius 20
         clip-to-geometry true
     }
 
-     // if you use steam you will probably like these
+    // Tile Steam itself, but float its child windows and notices.
     window-rule {
         match app-id="steam"
         exclude title=r#"^[Ss]team$"#

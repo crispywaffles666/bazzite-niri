@@ -1,9 +1,8 @@
 #!/usr/bin/bash
-# Fail the image build if Fedora/Bazzite dependency changes alter the intended
-# Niri desktop package composition.
+# Catch Fedora or Bazzite package changes that would break the Niri desktop.
 set -euxo pipefail
 
-REQUIRED_PACKAGES=(
+required=(
     niri
     gnome-keyring
     xdg-desktop-portal-gnome
@@ -11,23 +10,23 @@ REQUIRED_PACKAGES=(
     nautilus
 )
 
-FORBIDDEN_PACKAGES=(
+banned=(
     gnome-shell
     mutter
     gdm
     gnome-session
 )
 
-for package in "${REQUIRED_PACKAGES[@]}"; do
-    if ! rpm -q --quiet "$package"; then
-        echo "ERROR: required package is not installed: $package" >&2
+for pkg in "${required[@]}"; do
+    if ! rpm -q --quiet "$pkg"; then
+        echo "ERROR: required package is not installed: $pkg" >&2
         exit 1
     fi
 done
 
-for package in "${FORBIDDEN_PACKAGES[@]}"; do
-    if rpm -q --quiet "$package"; then
-        echo "ERROR: forbidden GNOME desktop package is installed: $package" >&2
+for pkg in "${banned[@]}"; do
+    if rpm -q --quiet "$pkg"; then
+        echo "ERROR: forbidden GNOME desktop package is installed: $pkg" >&2
         exit 1
     fi
 done

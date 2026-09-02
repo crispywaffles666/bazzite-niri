@@ -1,7 +1,4 @@
-# Theming defaults, matching the CachyOS-connected reference setup.
-# gtk-theme/icon-theme reference the themes baked into the image at /usr/share
-# (Graphite-purple-Dark-dracula GTK theme + dracula-icons-main icon theme), so
-# they take effect out of the box with no manual install.
+# These names must match the themes under /usr/share.
 [org.gnome.desktop.interface]
 color-scheme='prefer-dark'
 gtk-theme='Graphite-purple-Dark-dracula'

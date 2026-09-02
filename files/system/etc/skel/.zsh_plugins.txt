@@ -1,4 +1,3 @@
-# plugins
 zsh-users/zsh-completions kind:fpath path:src
 Aloxaf/fzf-tab
 zsh-users/zsh-autosuggestions kind:defer

@@ -1,10 +1,10 @@
 #!/bin/bash
-DIR="$HOME/Pictures/Screenshots"
-mkdir -p "$DIR"
+screenshot_dir="$HOME/Pictures/Screenshots"
+mkdir -p "$screenshot_dir"
 
 while read -r file <&3; do
     case "$file" in *.png) ;; *) continue ;; esac
-    path="$DIR/$file"
+    path="$screenshot_dir/$file"
     (
         action=$(notify-send -a "Screenshot" "Screenshot saved: $file" "" \
             -i "$path" \
@@ -17,4 +17,4 @@ while read -r file <&3; do
             copy)     wl-copy < "$path" ;;
         esac
     ) &
-done 3< <(inotifywait -m -e close_write --format '%f' "$DIR")
+done 3< <(inotifywait -m -e close_write --format '%f' "$screenshot_dir")

@@ -193,10 +193,8 @@ order            = "random"
 # ── Brightness ──
 
 [brightness]
-# Discover external monitors that support DDC/CI. Noctalia still prefers a
-# kernel backlight automatically on laptops.
+# Use DDC/CI for external displays; laptops keep their built-in backlight.
 enable_ddcutil = true
-# One brightness level for all monitors instead of per-monitor sliders.
 sync_all_monitors = true
 
 # ── Idle ──

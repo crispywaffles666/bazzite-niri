@@ -1,56 +1,43 @@
 #!/usr/bin/bash
-# Remove the GNOME desktop stack from bazzite-gnome while keeping:
-#   - xdg-desktop-portal-gnome (niri has no portal backend of its own)
-#   - gnome-keyring            (Secret Service / portal provider)
-#   - nautilus                 (user's GUI file manager)
-#   - gtk4/libadwaita/gvfs     (needed by ghostty, noctalia, nautilus deps)
-# Package names are filtered through rpm -q first, so the script stays
-# correct even when bazzite upstream changes its package set.
+# Keep Niri's portal, keyring, file manager, and their shared GTK tools.
+# Check each package first because Bazzite may change its package set.
 set -euxo pipefail
 
-EXPLICIT=(
-    # shell / session / display manager
+packages=(
     gnome-shell gnome-session gnome-session-wayland-session
     gnome-session-xsession mutter mutter-common gdm
-    # settings / system daemons
     gnome-control-center gnome-settings-daemon gnome-remote-desktop
     gnome-bluetooth gnome-color-manager gnome-user-share rygel
-    # gnome apps (nautilus deliberately kept)
     gnome-disk-utility gnome-system-monitor gnome-tour gnome-software
     gnome-initial-setup gnome-terminal ptyxis yelp gnome-user-docs
     gnome-browser-connector gnome-characters
-    # indexers: tinysparql/localsearch NOT removed — Fedora's nautilus
-    # hard-requires both (unlike Arch, where tracker is optional)
-    # bazzite's gnome-only additions
+    # Fedora's Nautilus needs tinysparql and localsearch.
     steamdeck-gnome-presets steamdeck-backgrounds
     gnome-search-yafti nautilus-gsconnect rom-properties-gtk4
     rom-properties-localsearch3
-    # misc shell integrations
     gnome-backgrounds gnome-epub-thumbnailer
     gnome-shell-extension-user-theme gnome-shell-extension-gsconnect
 )
 
-# glob-style families caught via rpm -qa
-PATTERNS='^(gnome-shell-extension-|papers)'
+family_pattern='^(gnome-shell-extension-|papers)'
 
-TO_REMOVE=()
-for pkg in "${EXPLICIT[@]}"; do
+remove=()
+for pkg in "${packages[@]}"; do
     if rpm -q --quiet "$pkg"; then
-        TO_REMOVE+=("$pkg")
+        remove+=("$pkg")
     fi
 done
 while read -r pkg; do
-    [ -n "$pkg" ] && TO_REMOVE+=("$pkg")
-done < <(rpm -qa --qf '%{NAME}\n' | grep -E "$PATTERNS" || true)
+    [ -n "$pkg" ] && remove+=("$pkg")
+done < <(rpm -qa --qf '%{NAME}\n' | grep -E "$family_pattern" || true)
 
-# protect the keepers from the autoremove pass below
+# Mark these as user-picked so autoremove keeps them.
 dnf5 -y mark user xdg-desktop-portal-gnome xdg-desktop-portal-gtk gnome-keyring nautilus
 
-if [ "${#TO_REMOVE[@]}" -gt 0 ]; then
-    # clean_requirements_on_remove=false: dnf5's orphan cascade on remove
-    # ignores install reasons and would take nautilus out with
-    # nautilus-gsconnect/papers-nautilus. Autoremove below does respect them.
-    dnf5 -y remove --setopt=clean_requirements_on_remove=false "${TO_REMOVE[@]}"
+if [ "${#remove[@]}" -gt 0 ]; then
+    # A normal remove ignores install reasons and drops Nautilus with its add-ons.
+    # Autoremove honors the user-picked marks above.
+    dnf5 -y remove --setopt=clean_requirements_on_remove=false "${remove[@]}"
 fi
 
 dnf5 -y autoremove

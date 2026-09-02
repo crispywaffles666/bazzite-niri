@@ -1,1 +1,1 @@
-# environment variables that must be set for non-interactive shells go here
+# Set values needed by non-interactive shells here.

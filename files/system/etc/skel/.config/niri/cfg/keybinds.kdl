@@ -1,13 +1,8 @@
 binds {
 
-    // ────────────── Keybindings ──────────────
-    // https://github.com/YaLTeR/niri/wiki/Configuration:-Key-Bindings
-
-    // ─── noctalia keybinds ───
-
     Mod+Shift+ESCAPE                     { show-hotkey-overlay; }
 
-    // ─── Applications ───
+    // Apps
     Mod+Return                          hotkey-overlay-title="Open Terminal: Alacritty" { spawn "alacritty"; }
     Alt+Space hotkey-overlay-title="Open App Launcher" { toggle-overview; }
     Mod+B                               hotkey-overlay-title="Open Browser: Brave" { spawn "brave-origin"; }
@@ -18,7 +13,7 @@ binds {
     Mod+E                               hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }
     Mod+Period                          hotkey-overlay-title="Emoji Picker: Smile" { spawn "smile-paste.sh"; }
 
-    // ─── Media Controls ───
+    // Sound and media
     XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"; }
     XF86AudioLowerVolume                allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
     XF86AudioMute                       allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
@@ -28,11 +23,11 @@ binds {
     XF86AudioPlay                       allow-when-locked=true { spawn "playerctl" "play-pause"; }
     XF86AudioPause                      allow-when-locked=true { spawn "playerctl" "play-pause"; }
 
-    // ─── Brightness Controls ───
+    // Brightness
     XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "noctalia msg raise-brightness"; }
     XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "noctalia msg lower-brightness"; }
 
-    // ─── Window Movement and Focus ───
+    // Windows
     Mod+Q                               { close-window; }
 
     Mod+Left                            { focus-column-left; }
@@ -68,7 +63,7 @@ binds {
     Mod+Shift+CTRL+UP                   { move-column-to-monitor-up; }
     Mod+Shift+CTRL+Down                 { move-column-to-monitor-down; }
 
-    // ─── Workspace Switching ───
+    // Workspaces
     Mod+WheelScrollDown                 cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp                   cooldown-ms=150 { focus-workspace-up; }
     Mod+CTRL+WheelScrollDown            cooldown-ms=150 { move-column-to-workspace-down; }
@@ -106,7 +101,7 @@ binds {
 
     Mod+TAB                             { focus-workspace-previous; }
 
-    // ─── Layout Controls ───
+    // Layout
     Mod+CTRL+F                          { expand-column-to-available-width; }
     Mod+C                               { center-column; }
     Mod+CTRL+C                          { center-visible-columns; }
@@ -115,22 +110,20 @@ binds {
     Mod+Shift+Minus                     { set-window-height "-10%"; }
     Mod+Shift+Equal                     { set-window-height "+10%"; }
 
-    // ─── Modes ───
+    // Modes
     Mod+T                               { toggle-window-floating; }
     Mod+F                               { fullscreen-window; }
     Mod+W                               { toggle-column-tabbed-display; }
 
-    // ─── Screenshots ───
+    // Screenshots
     Print                        { screenshot; }
     CTRL+Shift+2                        { screenshot-screen; }
     CTRL+Shift+3                        { screenshot-window; }
 
-    // ─── Emergency Escape Key ───
-    // Use this when a fullscreen app blocks your keybinds.
-    // It disables any active keyboard shortcut inhibitor, restoring control.
+    // Full-screen apps may block other bindings; keep this escape hatch.
     Mod+ESCAPE                          allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
-    // ─── Exit / Power ───
-    CTRL+ALT+Delete                     { quit; } // Also quits Niri
-    Mod+Shift+P                         { power-off-monitors; } // Turn off screens (useful for OLED or privacy)
+    // Power
+    CTRL+ALT+Delete                     { quit; }
+    Mod+Shift+P                         { power-off-monitors; }
 }
