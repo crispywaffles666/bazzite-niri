@@ -13,8 +13,10 @@ concurrency:
   cancel-in-progress: true
 jobs:
   bluebuild:
-    name: Build Custom Image
+    name: Build Custom Image (attempt 1)
     runs-on: ubuntu-latest
+    outputs:
+      build_outcome: ${{ steps.build.outcome }}
     permissions:
       contents: read
       packages: write
@@ -26,6 +28,35 @@ jobs:
           - recipe.yml
     steps:
       - name: Build Custom Image
+        id: build
+        # Preserve the raw outcome for the retry job without failing this attempt.
+        continue-on-error: true
+        uses: blue-build/github-action@v1.11
+        with:
+          recipe: ${{ matrix.recipe }}
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
+          registry_token: ${{ github.token }}
+          pr_event_number: ${{ github.event.number }}
+
+          # Small images can disable this to build faster.
+          maximize_build_space: true
+
+  bluebuild-retry:
+    name: Build Custom Image (retry)
+    needs: bluebuild
+    if: ${{ needs.bluebuild.outputs.build_outcome == 'failure' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      fail-fast: false # Let each recipe report its own result.
+      matrix:
+        recipe:
+          - recipe.yml
+    steps:
+      - name: Retry Build Custom Image
         uses: blue-build/github-action@v1.11
         with:
           recipe: ${{ matrix.recipe }}
