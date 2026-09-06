@@ -23,6 +23,12 @@ sudo systemctl reboot
 **Rollback:** bootc keeps the previous deployment. Pick the old entry in the
 boot menu, or after booting: `sudo bootc rollback`.
 
+**Update verification:** the image ships its own container policy and cosign
+public key (`/etc/containers/policy.json` +
+`/etc/pki/containers/ghcr.io-crispywaffles666-bazzite-niri.pub`), so every
+update pull after the first switch — not just the initial rebase — is verified
+against the signing key.
+
 <details>
 <summary><strong>Rebased and stuck in niri with a bad config?</strong></summary>
 
@@ -165,7 +171,10 @@ orphan of `nautilus-gsconnect`), then `dnf5 autoremove`.
    #   name: SIGNING_SECRET   value: <contents of cosign.key>
    ```
 
-   Commit `cosign.pub` to the repo root. Keep `cosign.key` out of git.
+   Commit `cosign.pub` to the repo root. Keep `cosign.key` out of git. Also
+   replace `files/system/etc/pki/containers/*.pub` with your new public key
+   and update the GHCR namespace in `files/system/etc/containers/policy.json`
+   and `files/system/etc/containers/registries.d/*.yaml` to match your repo.
 3. GitHub Actions builds on push (and daily at 06:00 UTC), signs the image,
    and pushes `ghcr.io/crispywaffles666/bazzite-niri:latest`.
 
@@ -184,7 +193,7 @@ bluebuild build recipes/recipe.yml
 
 - `recipes/recipe.yml` — the BlueBuild recipe
 - `files/system/` — copied verbatim to `/` (greetd config, gschema override,
-  `/etc/skel` dotfiles seed)
+  `/etc/skel` dotfiles seed, container signing policy + cosign public key)
 - `files/scripts/` — build scripts (GNOME removal, greetd setup, pinned
   theme/font fetches, `validate-package-set.sh` image gate: package/theme
   checks plus parsing the `/etc/skel` niri and Noctalia starter configs with
