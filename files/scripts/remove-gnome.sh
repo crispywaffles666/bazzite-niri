@@ -32,7 +32,7 @@ while read -r pkg; do
 done < <(rpm -qa --qf '%{NAME}\n' | grep -E "$family_pattern" || true)
 
 # Mark these as user-picked so autoremove keeps them.
-dnf5 -y mark user xdg-desktop-portal-gnome xdg-desktop-portal-gtk gnome-keyring nautilus
+dnf5 -y mark user xdg-desktop-portal-gnome xdg-desktop-portal-gtk gnome-keyring gnome-keyring-pam nautilus
 
 if [ "${#remove[@]}" -gt 0 ]; then
     # A normal remove ignores install reasons and drops Nautilus with its add-ons.

@@ -69,6 +69,10 @@ modules:
         - alacritty
         - xdg-desktop-portal-gnome
         - gnome-keyring
+        # pam_gnome_keyring.so unlocks the login keyring through greetd. GDM
+        # pulls this package in today, so removing GDM would let autoremove
+        # drop it unless it is installed and marked user-selected here.
+        - gnome-keyring-pam
         # Removing GNOME add-ons would also drop Nautilus.
         - nautilus
       exclude:

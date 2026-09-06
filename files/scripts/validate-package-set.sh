@@ -6,6 +6,9 @@ required=(
     niri
     noctalia
     gnome-keyring
+    # The PAM module that unlocks the login keyring via greetd. GDM depends
+    # on it, so the GNOME removal path must not let autoremove take it.
+    gnome-keyring-pam
     xdg-desktop-portal-gnome
     xdg-desktop-portal-gtk
     nautilus
@@ -142,5 +145,44 @@ if grep -E '^WARN[[:space:]]' "$noctalia_log"; then
     fail "skel noctalia config is stale for the installed noctalia (validator warnings above)"
 fi
 rm -rf "$noctalia_home"
+
+# The update verification chain must stay internally consistent: policy.json,
+# the registries.d sigstore config, and the public key all name the same GHCR
+# namespace and key path. The README tells forks to change the namespace and
+# key together; a forgotten half-edit must fail the build here.
+sig_key=/etc/pki/containers/ghcr.io-crispywaffles666-bazzite-niri.pub
+if [[ ! -s "$sig_key" ]]; then
+    fail "container signature public key missing: $sig_key"
+fi
+
+sigstore_config=/etc/containers/registries.d/ghcr.io-crispywaffles666-bazzite-niri.yaml
+if [[ ! -r "$sigstore_config" ]]; then
+    fail "registries sigstore config missing: $sigstore_config"
+fi
+if ! grep -q 'use-sigstore-attachments: true' "$sigstore_config"; then
+    fail "registries config missing use-sigstore-attachments"
+fi
+if ! grep -q 'ghcr.io/crispywaffles666/bazzite-niri' "$sigstore_config"; then
+    fail "registries config missing GHCR namespace"
+fi
+
+policy_file=/etc/containers/policy.json
+if [[ ! -r "$policy_file" ]]; then
+    fail "container policy missing: $policy_file"
+fi
+if command -v python3 >/dev/null 2>&1; then
+    if ! python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$policy_file" 2>/dev/null; then
+        fail "container policy is not valid JSON: $policy_file"
+    fi
+fi
+if ! grep -q '"ghcr.io/crispywaffles666/bazzite-niri"' "$policy_file"; then
+    fail "container policy missing GHCR namespace"
+fi
+if ! grep -q '"type": "sigstoreSigned"' "$policy_file"; then
+    fail "container policy missing sigstoreSigned rule"
+fi
+if ! grep -q "$sig_key" "$policy_file"; then
+    fail "container policy does not reference the signature public key path: $sig_key"
+fi
 
 echo "Package-set and skel config validation passed."
