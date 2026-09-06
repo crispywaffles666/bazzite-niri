@@ -26,17 +26,18 @@ jobs:
           - recipe.yml
     steps:
       - name: Build Custom Image
-        uses: blue-build/github-action@v1.12
+        uses: blue-build/github-action@836161eb076426a451e6a0054f722b1153b8b3ad # v1.12
         with:
           recipe: ${{ matrix.recipe }}
           cosign_private_key: ${{ secrets.SIGNING_SECRET }}
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
 
-          # Dependabot-triggered runs receive no Actions secrets and a
-          # read-only token, so they can only build: skip push and signing.
-          push: ${{ github.actor != 'dependabot[bot]' }}
-          build_opts: ${{ github.actor == 'dependabot[bot]' && '--no-sign' || '' }}
+          # PRs get no repository secrets (forks) and a read-only token, so
+          # they build and validate only. Only default-branch pushes and
+          # schedules may publish and sign.
+          push: ${{ github.event_name != 'pull_request' }}
+          build_opts: ${{ github.event_name == 'pull_request' && '--no-sign' || '' }}
 
           # Rechunk into content-defined layers for smaller delta updates:
           # the same rpm-ostree build-chunked-oci mechanism, layer cap, and
