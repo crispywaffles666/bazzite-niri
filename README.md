@@ -55,6 +55,15 @@ If your existing config depends on a different set of shell components, expect t
 </details>
 
 ## Copying my configs:
+The image ships starter user configs through `/etc/skel`. They are copied into
+a home directory only when a new user is created — existing users never
+receive updates to them automatically (this section is how you pull in new
+versions manually). At image build time the skel niri config is parsed by the
+installed `niri validate` (including every `cfg/*.kdl` include) and the
+Noctalia config (`config.toml`, v5 format) by the installed
+`noctalia config validate`, so a starter config that goes stale as niri or
+Noctalia update fails the build instead of breaking fresh installs.
+
 Whether you want them just to get a working environment, or to build off of; the bare minimum niri config, the noctalia shell config, and helper scripts can be copied by:
 
    ```bash
@@ -118,7 +127,7 @@ cosign, published to GHCR by GitHub Actions.
 
 - Base: `ghcr.io/ublue-os/bazzite-gnome:stable` (Fedora 44)
 - Compositor: `niri` + `xwayland-satellite` (official Fedora repos)
-- Shell: `noctalia` v5 (official Fedora repos)
+- Shell: `noctalia` v5 (Terra, enabled at build only)
 - Display manager: `greetd` + `tuigreet` (GDM removed; both from the official Fedora repos)
 - Kept from GNOME: `xdg-desktop-portal-gnome` (niri has no portal backend),
   `gnome-keyring` (Secret Service / portal provider), `nautilus` (file manager)
@@ -127,8 +136,8 @@ cosign, published to GHCR by GitHub Actions.
 
 | Source | Packages |
 |---|---|
-| Fedora 44 | niri, xwayland-satellite, noctalia, greetd, tuigreet, alacritty, brightnessctl, playerctl, inotify-tools, wl-clipboard, pavucontrol, cava, seahorse, xterm, zsh, bat, micro, geany, ripgrep, stow, overpass-fonts, xdg-desktop-portal-gnome, gnome-keyring, nautilus |
-| terra (enabled at build only) | ghostty, satty, yazi, starship |
+| Fedora 44 | niri, xwayland-satellite, greetd, tuigreet, alacritty, brightnessctl, playerctl, inotify-tools, wl-clipboard, pavucontrol, cava, seahorse, xterm, zsh, bat, micro, geany, ripgrep, stow, overpass-fonts, xdg-desktop-portal-gnome, gnome-keyring, nautilus |
+| terra (enabled at build only) | noctalia, ghostty, satty, yazi, starship |
 | brave (first-party rpm repo, enabled at build only) | brave-origin |
 | Vendored at build | Overpass Nerd Font (pinned Arch package `otf-overpass-nerd-3.4.0-2`, sha256-verified — not in Fedora/COPR/nerd-fonts release zips) |
 
@@ -176,5 +185,9 @@ bluebuild build recipes/recipe.yml
 - `recipes/recipe.yml` — the BlueBuild recipe
 - `files/system/` — copied verbatim to `/` (greetd config, gschema override,
   `/etc/skel` dotfiles seed)
-- `files/scripts/` — build scripts (GNOME removal, greetd setup, pinned theme/font fetches)
+- `files/scripts/` — build scripts (GNOME removal, greetd setup, pinned
+  theme/font fetches, `validate-package-set.sh` image gate: package/theme
+  checks plus parsing the `/etc/skel` niri and Noctalia starter configs with
+  the `niri validate` / `noctalia config validate` binaries installed in the
+  image)
 - `.github/workflows/build.yml` — CI (blue-build reusable action, cosign)

@@ -4,6 +4,7 @@ set -euxo pipefail
 
 required=(
     niri
+    noctalia
     gnome-keyring
     xdg-desktop-portal-gnome
     xdg-desktop-portal-gtk
@@ -92,3 +93,54 @@ if ! grep -Fxq "icon-theme='dracula-icons-main'" "$theme_schema"; then
     echo "ERROR: GNOME schema override has the wrong icon theme name" >&2
     exit 1
 fi
+
+fail() {
+    echo "ERROR: $*" >&2
+    exit 1
+}
+
+# Parse all included files with the niri version in this image. The temporary
+# home keeps the check free of any builder-user state and needs no session.
+niri_skel=/etc/skel/.config/niri
+if [[ ! -f "$niri_skel/config.kdl" ]]; then
+    fail "skel niri config.kdl missing: $niri_skel/config.kdl"
+fi
+test_home="$(mktemp -d)"
+mkdir -p "$test_home/.config"
+cp -r "$niri_skel" "$test_home/.config/niri"
+if ! HOME="$test_home" XDG_CONFIG_HOME="$test_home/.config" niri validate; then
+    fail "skel niri config failed niri validate (removed option or broken include?)"
+fi
+rm -rf "$test_home"
+
+# Parse the shipped Noctalia shell config with the exact noctalia build in
+# this image. Validating by directory path keeps the check offline: no
+# running shell, graphical session, or user DBus is required.
+noctalia_skel=/etc/skel/.config/noctalia
+if [[ ! -f "$noctalia_skel/config.toml" ]]; then
+    fail "skel noctalia config.toml missing: $noctalia_skel/config.toml"
+fi
+noctalia_home="$(mktemp -d)"
+mkdir -p "$noctalia_home/.config"
+cp -r "$noctalia_skel" "$noctalia_home/.config/noctalia"
+noctalia_log="$noctalia_home/validate.log"
+noctalia_status=0
+HOME="$noctalia_home" XDG_CONFIG_HOME="$noctalia_home/.config" \
+    XDG_STATE_HOME="$noctalia_home/.local/state" \
+    noctalia config validate "$noctalia_home/.config/noctalia" \
+    >"$noctalia_log" 2>&1 || noctalia_status=$?
+# Keep the validator's own output in the build log either way.
+cat "$noctalia_log"
+if [[ "$noctalia_status" -ne 0 ]]; then
+    fail "skel noctalia config failed noctalia config validate (exit $noctalia_status)"
+fi
+# Unknown/removed settings, bad enum values, and migration-needed keys are
+# reported as WARN diagnostics with exit status 0, so exit code alone cannot
+# catch a stale shipped config. Those diagnostics always start with "WARN ";
+# timestamped log lines (e.g. container-environment noise) never do.
+if grep -E '^WARN[[:space:]]' "$noctalia_log"; then
+    fail "skel noctalia config is stale for the installed noctalia (validator warnings above)"
+fi
+rm -rf "$noctalia_home"
+
+echo "Package-set and skel config validation passed."
