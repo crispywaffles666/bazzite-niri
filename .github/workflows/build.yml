@@ -43,6 +43,12 @@ jobs:
           push: ${{ github.actor != 'dependabot[bot]' }}
           build_opts: ${{ github.actor == 'dependabot[bot]' && '--no-sign' || '' }}
 
+          # Rechunk into content-defined layers for smaller delta updates:
+          # the same rpm-ostree build-chunked-oci mechanism, layer cap, and
+          # pre-push/sign placement as ublue-os/image-template's ostree-rechunk.
+          build_chunked_oci: "true"
+          max_layers: "127"
+
           # Small images can disable this to build faster.
           maximize_build_space: true
 
@@ -73,6 +79,12 @@ jobs:
           # read-only token, so they can only build: skip push and signing.
           push: ${{ github.actor != 'dependabot[bot]' }}
           build_opts: ${{ github.actor == 'dependabot[bot]' && '--no-sign' || '' }}
+
+          # Rechunk into content-defined layers for smaller delta updates:
+          # the same rpm-ostree build-chunked-oci mechanism, layer cap, and
+          # pre-push/sign placement as ublue-os/image-template's ostree-rechunk.
+          build_chunked_oci: "true"
+          max_layers: "127"
 
           # Small images can disable this to build faster.
           maximize_build_space: true
