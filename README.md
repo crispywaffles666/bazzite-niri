@@ -16,6 +16,29 @@ This is my personal bazzite image which strips out most of GNOME and instead rep
 
 ## Rebasing onto this image
 
+The first switch starts on your **current** installation: the destination
+image's key and policy are not installed yet. Bootstrap trust before enforcing
+it. From a checkout of this repository that you trust, review `cosign.pub` and
+`scripts/install-image-trust.sh`, then run:
+
+```bash
+git clone https://github.com/crispywaffles666/bazzite-niri.git
+cd bazzite-niri
+# Review this checkout/key through a trusted channel before running as root.
+sudo bash scripts/install-image-trust.sh
+```
+
+The script requires `jq`, installs this image's public key and signature lookup
+configuration, and atomically merges **only this repository's rule** into your
+existing `/etc/containers/policy.json`. It preserves unrelated rules and saves
+the original policy as `policy.json.before-bazzite-niri`. It does not switch or
+reboot your system. To view the key fingerprint: `sha256sum cosign.pub`; compare
+it through an independently trusted channel if you need to authenticate the
+initial checkout. Downloading a key from the same repository is a trust
+decision, not independent proof of the publisher's identity.
+
+Now perform the verified switch:
+
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/crispywaffles666/bazzite-niri:latest
 sudo systemctl reboot
@@ -182,6 +205,14 @@ If you skip step 2, the workflow still builds and pushes, but images are
 unsigned and `--enforce-container-sigpolicy` rebases will fail.
 
 ## Local build
+
+CI verifies the upstream Bazzite signature with the vendored Universal Blue
+key and gives BlueBuild the same immutable digest. The BlueBuild installer
+is verified too. Only main publishes; branch builds and PRs cannot push images.
+Persistent layer caching is enabled for the pinned theme/font builder, whose
+inputs are copied separately from desktop configuration. The first main-image
+RPM step explicitly bypasses cache, keeping mutable packages fresh on every
+build, including scheduled runs. System configuration is copied after packages.
 
 ```bash
 bluebuild build recipes/recipe.yml

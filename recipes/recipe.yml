@@ -10,56 +10,25 @@ stages:
   - name: theme-builder
     from: registry.fedoraproject.org/fedora:44
     modules:
-      - type: dnf
-        install:
-          install-weak-deps: false
-          packages:
-            - bash
-            - coreutils
-            - curl
-            - gzip
-            - sassc
-            - sed
-            - tar
-            - gtk-update-icon-cache
-
-      - type: script
-        scripts:
-          - install-themes.sh
+      # Native instructions copy only each pinned installer. Ordinary module
+      # mounts include all /files, which would invalidate this cache on dot edits.
+      - type: containerfile
+        snippets:
+          - |
+            RUN dnf install -y --setopt=install_weak_deps=False \
+                bash coreutils curl gzip sassc sed tar gtk-update-icon-cache zstd fontconfig && \
+                dnf clean all
+            COPY files/scripts/install-themes.sh /tmp/install-themes.sh
+            RUN bash /tmp/install-themes.sh
+            COPY files/scripts/install-overpass-nerd.sh /tmp/install-overpass-nerd.sh
+            RUN bash /tmp/install-overpass-nerd.sh
 
 modules:
-  - type: files
-    files:
-      - source: system
-        destination: /
-
-  # Copy only generated artifacts out of the disposable build stage.
-  - type: script
-    snippets:
-      - rm -rf /usr/share/themes/Graphite-purple-Dark-dracula /usr/share/icons/dracula-icons-main
-
-  - type: copy
-    from: theme-builder
-    src: /usr/share/themes/Graphite-purple-Dark-dracula
-    dest: /usr/share/themes/Graphite-purple-Dark-dracula
-
-  - type: copy
-    from: theme-builder
-    src: /usr/share/icons/dracula-icons-main
-    dest: /usr/share/icons/dracula-icons-main
-
-  - type: copy
-    from: theme-builder
-    src: /usr/share/licenses/Graphite-gtk-theme
-    dest: /usr/share/licenses/Graphite-gtk-theme
-
-  - type: copy
-    from: theme-builder
-    src: /usr/share/licenses/dracula-icons
-    dest: /usr/share/licenses/dracula-icons
-
+  # Fresh mutable RPM inputs on every build (including scheduled builds).
+  # Only the isolated, pinned theme/font stage uses persistent cache hits.
   # Mark the portal and keyring as user-picked so autoremove keeps them.
   - type: dnf
+    no-cache: true
     install:
       packages:
         - niri
@@ -134,13 +103,52 @@ modules:
   - type: script
     scripts:
       - remove-gnome.sh
-      - setup-greetd.sh
-      - install-overpass-nerd.sh
 
   - type: dnf
     install:
       packages:
         - overpass-fonts
+
+  - type: files
+    files:
+      - source: system
+        destination: /
+
+  # Copy only generated artifacts out of the disposable build stage.
+  - type: script
+    snippets:
+      - rm -rf /usr/share/themes/Graphite-purple-Dark-dracula /usr/share/icons/dracula-icons-main
+
+  - type: copy
+    from: theme-builder
+    src: /usr/share/themes/Graphite-purple-Dark-dracula
+    dest: /usr/share/themes/Graphite-purple-Dark-dracula
+
+  - type: copy
+    from: theme-builder
+    src: /usr/share/icons/dracula-icons-main
+    dest: /usr/share/icons/dracula-icons-main
+
+  - type: copy
+    from: theme-builder
+    src: /usr/share/licenses/Graphite-gtk-theme
+    dest: /usr/share/licenses/Graphite-gtk-theme
+
+  - type: copy
+    from: theme-builder
+    src: /usr/share/licenses/dracula-icons
+    dest: /usr/share/licenses/dracula-icons
+
+  - type: copy
+    from: theme-builder
+    src: /usr/share/fonts/OTF/overpass-nerd
+    dest: /usr/share/fonts/OTF/overpass-nerd
+
+  - type: script
+    snippets:
+      - fc-cache -f /usr/share/fonts/OTF/overpass-nerd
+    scripts:
+      - setup-greetd.sh
 
   # These overrides name schemas or keys that GNOME cleanup removes. Drop them
   # before the strict check so any bad key left in this image fails the build.
