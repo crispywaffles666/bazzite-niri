@@ -166,7 +166,7 @@ cosign, published to GHCR by GitHub Actions.
 | Source | Packages |
 |---|---|
 | Fedora 44 | niri, xwayland-satellite, greetd, tuigreet, alacritty, brightnessctl, playerctl, inotify-tools, wl-clipboard, pavucontrol, cava, seahorse, xterm, zsh, bat, micro, geany, ripgrep, stow, overpass-fonts, xdg-desktop-portal-gnome, gnome-keyring, nautilus |
-| terra (enabled at build only) | noctalia, ghostty, satty, yazi, starship |
+| terra (enabled at build only) | noctalia, ghostty, satty, yazi, starship, keyd (service left disabled; opt in with `systemctl enable --now keyd` plus your own `/etc/keyd` config) |
 | brave (first-party rpm repo, enabled at build only) | brave-origin |
 | Vendored at build | Overpass Nerd Font (pinned Arch package `otf-overpass-nerd-3.4.0-2`, sha256-verified — not in Fedora/COPR/nerd-fonts release zips) |
 

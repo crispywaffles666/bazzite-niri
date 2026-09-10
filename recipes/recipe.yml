@@ -65,6 +65,9 @@ modules:
         - brightnessctl
         - playerctl
         - inotify-tools
+        # keyd ships ready to use but its service stays disabled; users opt in
+        # with `systemctl enable --now keyd` and their own /etc/keyd config.
+        - keyd
         # The screenshot tools call wl-copy, but no package pulls it in.
         - wl-clipboard
         # Smile's GNOME-only add-on cannot paste under Niri, so the wrapper
